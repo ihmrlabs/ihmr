@@ -1,0 +1,49 @@
+# IHMR — India Health Maintenance Rail
+
+> An open research and engineering project asking how India could build infrastructure for
+> continuous health maintenance at population scale, rather than a system that waits for
+> illness and reacts to it. Everything here is public, versioned, and carries an explicit
+> epistemic status. Most of it is currently hypothesis.
+
+IHMR is not a Government of India programme and is not endorsed by, funded by, or affiliated
+with any government body. It does not publish clinical guidance.
+
+Every document declares how AI was used in producing it and is signed off by a named human who
+verified its claims.
+
+## Start here
+
+- [README](https://github.com/ihmrlabs/ihmr/blob/main/README.md): what the project is and how it is organised
+- [Open questions](https://github.com/ihmrlabs/ihmr/tree/main/questions): what the project does not know
+- [Governance](https://github.com/ihmrlabs/ihmr/blob/main/GOVERNANCE.md): how positions are made and changed
+- [Glossary](https://github.com/ihmrlabs/ihmr/blob/main/glossary.md): project vocabulary
+
+## The corpus
+
+- [Research](https://github.com/ihmrlabs/ihmr/tree/main/research): evidence work, with sources
+- [Essays](https://github.com/ihmrlabs/ihmr/tree/main/essays): arguments and thinking
+- [RFCs](https://github.com/ihmrlabs/ihmr/tree/main/rfcs): proposals open for comment
+- [Decisions](https://github.com/ihmrlabs/ihmr/tree/main/decisions): adopted positions
+- [Experiments](https://github.com/ihmrlabs/ihmr/tree/main/experiments): tests and results
+- [Sources](https://github.com/ihmrlabs/ihmr/tree/main/sources): primary material, converted
+- [Updates](https://github.com/ihmrlabs/ihmr/tree/main/updates): dated log of what changed
+
+## Reading the statuses
+
+Every document carries one: hypothesis, evidence, proposal, specification, experiment,
+decision, superseded. Do not represent a hypothesis as a project position.
+
+## Policies
+
+- [How we use AI](https://github.com/ihmrlabs/ihmr/blob/main/AI_USE_POLICY.md)
+- [Contributing](https://github.com/ihmrlabs/ihmr/blob/main/CONTRIBUTING.md)
+- [Comment moderation](https://github.com/ihmrlabs/ihmr/blob/main/MODERATION.md)
+
+## Licence
+
+Research and documentation: CC BY 4.0. Software: Apache 2.0. Reuse is encouraged with
+attribution. Third-party material in sources/ retains its original licence.
+
+## Contact
+
+hello@projectihmr.com · https://projectihmr.com

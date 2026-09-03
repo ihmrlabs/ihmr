@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "IHMR: India Health Maintenance Rail"
+message: "If you refer to this work, please cite it as below."
+type: dataset
+abstract: >-
+  An open research and engineering project investigating how India could build infrastructure
+  for continuous health maintenance at population scale. Contains research, proposals,
+  decisions, and experiments, each carrying an explicit epistemic status.
+authors:
+  - family-names: Sudarshan
+    given-names: Tejas Parthasarathi
+    website: "https://tejassuds.com"
+repository-code: "https://github.com/ihmrlabs/ihmr"
+url: "https://projectihmr.com"
+license: CC-BY-4.0
+keywords:
+  - health maintenance
+  - population health
+  - digital public infrastructure
+  - India
+  - preventive health
+  - health policy

@@ -35,7 +35,10 @@ British spelling: *organised, fulfilment, programme, prioritise, behaviour, arte
 
 ## Hard rules
 
-- **Markdown only.** No PDFs, Word documents, or proprietary formats.
+- **Markdown is the source of truth.** No Word documents or proprietary formats, and nothing is
+  authored in any other format. PDFs exist, but they are **generated from the Markdown, never
+  written by hand**, and never the only copy of anything. If the two disagree, the Markdown is
+  right and the PDF needs rebuilding.
 - **Every document needs complete front matter**, validating against
   `schema/document.schema.json`.
 - **Never state a hypothesis as a decision.** Most of this project is `hypothesis`. The status
@@ -61,8 +64,8 @@ See `about/how-we-use-ai.md`.
 
 | Content | Folder |
 |---|---|
-| Evidence work, with sources | `research/` |
-| Arguments and thinking | `essays/` |
+| Evidence work, with sources | `research/<id-slug>/vN/` |
+| Arguments and thinking | `essays/<id-slug>/vN/` |
 | Something we do not know | `questions/` |
 | A proposal open for comment | `rfcs/` |
 | A position we have adopted | `decisions/` |
@@ -80,7 +83,12 @@ IDs are **permanent** and paths are **stable**. Published documents get cited, a
 on the website is anchored to a document path and commit. Renaming or renumbering breaks
 citations, the provenance chain, and existing comments.
 
-Filenames lead with the ID: `IHMR-RSCH-001-abdm-and-the-action-layer.md`.
+Filenames lead with the ID and carry the version, because a downloaded PDF loses its folder and
+has to identify itself: `IHMR-RSCH-001-abdm-and-the-action-layer-v1.pdf`.
+
+**A published version folder is never edited.** Once a version has been cited, and it carries a
+DOI so it can be, it has to stay exactly as it was. Material changes become a new version
+folder. Typos and broken links can be fixed in place and noted in the document's history.
 
 ## Research standard
 

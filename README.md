@@ -67,7 +67,7 @@ reasoning where you can still find it.
 | [`architecture/`](architecture/) | How the system might be built |
 | [`sources/`](sources/) | Primary material, converted so you can check our work |
 | [`updates/`](updates/) | What changed, and what we learned |
-| [`about/`](about/) | How we work: governance, glossary, roadmap, policies |
+| [`about/`](about/) | How we work: governance, glossary, roadmap, privacy, security |
 
 Everything is Markdown. Every document has a permanent ID and a visible history, so any claim
 can be traced back to where it came from.

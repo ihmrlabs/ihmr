@@ -2,22 +2,22 @@
 
 Instructions for AI agents working in the `ihmr` repository.
 
-`AGENTS.md` carries the same content. If you are a person, `README.md` and `CONTRIBUTING.md`
+`AGENTS.md` carries the same content. If you are a person, `README.md` and `.github/CONTRIBUTING.md`
 are friendlier places to start.
 
 ## What this repository is
 
-The **canonical public record** of IHMR — the India Health Maintenance Rail. An open research
+The **canonical public record** of IHMR - the India Health Maintenance Rail. An open research
 project asking how India could build infrastructure for continuous health maintenance at
 population scale.
 
 If IHMR claims something publicly, it is represented here.
 
-## Tone — this matters
+## Tone - this matters
 
 **The writing here is warm and inviting.** This is a deliberate choice, not an accident of
-style. The project depends on domain experts — clinicians, civil servants, community health
-workers — choosing to engage, and most of them are not going to push through a document that
+style. The project depends on domain experts - clinicians, civil servants, community health
+workers - choosing to engage, and most of them are not going to push through a document that
 reads like a compliance manual.
 
 Write as a knowledgeable person genuinely glad the reader turned up:
@@ -52,10 +52,10 @@ British spelling: *organised, fulfilment, programme, prioritise, behaviour, arte
 ## AI disclosure
 
 Set `ai_disclosure` on anything you draft or substantially edit, and **leave `signed_off_by`
-blank** — only a named human can sign off. If you are between two tiers, declare the higher
+blank** - only a named human can sign off. If you are between two tiers, declare the higher
 one. Never list an AI as an author. Never write that AI verified anything.
 
-See `AI_USE_POLICY.md`.
+See `about/how-we-use-ai.md`.
 
 ## Where things go
 
@@ -68,6 +68,7 @@ See `AI_USE_POLICY.md`.
 | A position we have adopted | `decisions/` |
 | A test and its result | `experiments/` |
 | How something might be built | `architecture/` |
+| How the project works | `about/` |
 | Converted primary material | `sources/` |
 | What changed this week | `updates/` |
 

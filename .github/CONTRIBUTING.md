@@ -4,7 +4,7 @@ We are genuinely glad you are here.
 
 **You do not need to be an engineer to contribute**, and you do not need to know anything about
 Git. If our tooling gets in the way of you telling us something useful, that is our problem to
-fix — please just email hello@projectihmr.com and we will sort it out.
+fix - please just email hello@projectihmr.com and we will sort it out.
 
 The single most valuable thing you can do is **tell us where we are wrong**.
 
@@ -17,7 +17,7 @@ The single most valuable thing you can do is **tell us where we are wrong**.
 | A clinician | Tell us where a clinical assumption is wrong, or unsafe |
 | A public-health researcher | Tell us if this has been tried before, and what happened |
 | An epidemiologist | Challenge how we describe burden, risk, or population data |
-| A health economist | Take apart the financing argument — who really pays for prevention? |
+| A health economist | Take apart the financing argument - who really pays for prevention? |
 | A civil servant or state health official | Tell us what is institutionally impossible, and why |
 | An insurer | Tell us whether prevention financing is realistic or wishful thinking |
 | A community health worker, ASHA, or ANM | Tell us what the last mile actually looks like |
@@ -32,17 +32,17 @@ means we have not thought of you yet, and we would like to.
 
 ### 1. Leave a comment on the website
 
-At [projectihmr.com](https://projectihmr.com). No account needed — you verify your email once,
+At [projectihmr.com](https://projectihmr.com). No account needed - you verify your email once,
 and you can comment under your name or anonymously.
 
 **A real person reads every comment before it is published**, and if we do not publish yours,
-we will write back and tell you why. That is not there to filter out disagreement — disagreement
+we will write back and tell you why. That is not there to filter out disagreement - disagreement
 is exactly what we are hoping for. It is there to keep the discussion useful and to make sure
 nobody accidentally shares personal health information in public.
 
 ### 2. Start a Discussion
 
-[GitHub Discussions](https://github.com/ihmrlabs/ihmr/discussions) is for open conversation —
+[GitHub Discussions](https://github.com/ihmrlabs/ihmr/discussions) is for open conversation -
 questions, challenges, and ideas that do not attach neatly to one document.
 
 ### 3. Open an Issue
@@ -52,18 +52,18 @@ exist. Opening an issue does not commit us to anything, and it does not commit y
 
 ### 4. Open a Pull Request
 
-If you are comfortable with it, propose the change directly. **Prose is as welcome as code** —
+If you are comfortable with it, propose the change directly. **Prose is as welcome as code** -
 most of this repository is writing.
 
 ## How to tell us we are wrong
 
 This is the contribution we value most, so here is what makes it easiest for us to act on. None
-of it is required — a rough note is much better than no note.
+of it is required - a rough note is much better than no note.
 
 - **Point at the claim.** Quote it, or give us the document ID and section.
-- **Say what is wrong** — the fact, the reasoning, the framing, or the conclusion.
+- **Say what is wrong** - the fact, the reasoning, the framing, or the conclusion.
 - **Share a source if you have one.** If you know it from practice rather than from the
-  literature, please say so — field knowledge is real evidence, and we would much rather have it
+  literature, please say so - field knowledge is real evidence, and we would much rather have it
   labelled honestly than dressed up as a citation.
 - **Tell us what would change our mind**, if you can see it.
 
@@ -71,7 +71,7 @@ You do not need to propose a fix. Spotting the problem is the hard part.
 
 ## If you are writing a document
 
-Everything here is **Markdown** — plain text with light formatting. If you can write in a word
+Everything here is **Markdown** - plain text with light formatting. If you can write in a word
 processor, you can write Markdown.
 
 Every document starts with a small block of information about itself:
@@ -100,12 +100,12 @@ Our checks will validate this automatically and tell you plainly if something is
 you would rather not deal with it at all, send us the text and we will handle the rest.
 
 Just below the title, every document carries a short line saying how AI was used in writing it.
-See [AI_USE_POLICY.md](AI_USE_POLICY.md).
+See [AI_USE_POLICY.md](../about/how-we-use-ai.md).
 
 ### The standard we hold ourselves to
 
 This project touches health, public policy, and national infrastructure. Careless research here
-does not just produce a weak document — it produces a plausible, well-argued proposal about how
+does not just produce a weak document - it produces a plausible, well-argued proposal about how
 a country should look after the health of more than a billion people. So we try to be careful:
 
 - **Prefer primary sources**, and cite anything that matters.
@@ -123,7 +123,7 @@ a country should look after the health of more than a billion people. So we try 
 ### Clinical claims
 
 Anything clinical needs review by someone clinically qualified. If that is not you, flag it and
-stop — we will find a reviewer. We would much rather hold a claim than publish it unreviewed.
+stop - we will find a reviewer. We would much rather hold a claim than publish it unreviewed.
 
 **We do not issue clinical guidance**, and nothing here should read as though we do.
 
@@ -139,7 +139,7 @@ stop — we will find a reviewer. We would much rather hold a claim than publish
 ## Credit
 
 We credit contributors by name, and we would like to credit you. **AI tools are never listed as
-authors** — a tool we used is not a person to thank.
+authors** - a tool we used is not a person to thank.
 
 If you would rather contribute without public attribution, just say so. That is completely fine
 and we will respect it.
@@ -147,9 +147,9 @@ and we will respect it.
 ## Being decent to each other
 
 See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). The short version: argue with the work as hard as
-you like — please do — but be kind to the person.
+you like - please do - but be kind to the person.
 
 ---
 
-Not sure where to start? [`questions/`](questions/) is a good place. Or just email
+Not sure where to start? [`questions/`](../questions/) is a good place. Or just email
 hello@projectihmr.com and tell us what you are thinking. We read everything.

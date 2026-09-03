@@ -48,10 +48,10 @@ When a position changes:
 1. The old document is marked `superseded`, with the date and what replaced it.
 2. **The old document is not deleted or rewritten.** The reasoning stays discoverable.
 3. The new document records what it supersedes and why.
-4. The change appears in [`updates/`](updates/) and on the project's *changed our mind* page.
+4. The change appears in [`updates/`](../updates/) and on the project's *changed our mind* page.
 
 Quietly amending a published claim is not permitted. Corrections are made visibly. For health
-and policy claims, a silently amended statement is worse than an openly retracted one — it is
+and policy claims, a silently amended statement is worse than an openly retracted one - it is
 uncitable.
 
 ## Review
@@ -65,14 +65,14 @@ uncitable.
 
 **Every document is signed off by a named human.** Sign-off means: *I have read this, I have
 checked its claims against their sources, and if it is wrong that is my error.* See
-[AI_USE_POLICY.md](AI_USE_POLICY.md).
+[AI_USE_POLICY.md](how-we-use-ai.md).
 
 Where the project lacks the expertise to review a claim, it says so and holds the claim rather
 than publishing it unreviewed.
 
 ## Challenging a position
 
-Please do — including a decision we have already published. Nothing here is above being
+Please do - including a decision we have already published. Nothing here is above being
 questioned.
 
 - Comment on the document at [projectihmr.com](https://projectihmr.com)
@@ -80,12 +80,12 @@ questioned.
 - Open an issue or a pull request
 
 If you find a real error we will act on it and credit you. If we disagree with you, you will
-get a recorded reason rather than silence — you took the time, and you deserve an answer.
+get a recorded reason rather than silence - you took the time, and you deserve an answer.
 
 ## Conflicts of interest
 
-If you have a material interest in an outcome — commercial, institutional, political, or
-financial — please just say so alongside your contribution. **It does not disqualify anything.**
+If you have a material interest in an outcome - commercial, institutional, political, or
+financial - please just say so alongside your contribution. **It does not disqualify anything.**
 Declared interests are fine and normal; undeclared ones are what damage a project's credibility.
 
 The maintainer's own affiliations and interests will be declared as and when they become

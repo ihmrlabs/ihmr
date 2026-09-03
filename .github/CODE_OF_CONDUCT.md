@@ -14,13 +14,13 @@ Rigour is not rudeness, and we will never treat a well-aimed criticism as an att
 - Discrimination or slurs of any kind
 - Publishing anyone's private information, including their health information
 - Sustained disruption of discussion
-- Bad-faith participation — arguing to exhaust rather than to understand
+- Bad-faith participation - arguing to exhaust rather than to understand
 
 ## A note particular to this project
 
 We are working on health, which means people sometimes arrive carrying difficult personal
 experience. Please be gentle with each other, and please do not share identifiable health
-details about yourself or anyone else in public — we will remove them, kindly, to protect the
+details about yourself or anyone else in public - we will remove them, kindly, to protect the
 person involved.
 
 ## Scope
@@ -41,7 +41,7 @@ because of it.
 ## What happens
 
 Depending on what happened: a private word, a request to change something, removal of a
-comment, or — rarely — being asked to stop participating. We will explain our reasoning to the
+comment, or - rarely - being asked to stop participating. We will explain our reasoning to the
 people involved.
 
 ---

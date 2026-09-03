@@ -2,7 +2,7 @@
 
 **We use AI in this project, and we think telling you exactly how is part of using it well.**
 
-Research, engineering, analysis, drafting — AI is involved in all of it. Our own central idea is
+Research, engineering, analysis, drafting - AI is involved in all of it. Our own central idea is
 that AI changes what coordination costs, so refusing to use it in our own work would be a
 strange position to hold.
 
@@ -28,7 +28,7 @@ Every document says so, at the top, where you cannot miss it.
 
 **This is not a confession.** We think a project that uses AI well and says so plainly is more
 trustworthy than one that uses it quietly. The only version of this we would treat as serious
-misconduct is using AI and *not* saying so — not because using it is wrong, but because hiding
+misconduct is using AI and *not* saying so - not because using it is wrong, but because hiding
 how work was made is.
 
 | Label | What it means |
@@ -41,7 +41,7 @@ how work was made is.
 
 Where it is a close call, we declare the higher one. Over-disclosing costs us nothing.
 
-These labels describe how the *text* was made. They say nothing about quality — a carefully
+These labels describe how the *text* was made. They say nothing about quality - a carefully
 verified `ai-generated-draft` can easily be better than a carelessly written `none`.
 
 ## What AI does here
@@ -77,7 +77,7 @@ can add later.
 
 ## If you spot something
 
-If you find a claim here that does not hold up, please tell us — that is exactly the failure
+If you find a claim here that does not hold up, please tell us - that is exactly the failure
 this policy exists to catch, and we would much rather hear it from you than not hear it at all.
 
 hello@projectihmr.com

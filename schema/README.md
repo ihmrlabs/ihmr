@@ -14,14 +14,14 @@ text and we will handle the metadata.
 
 | Field | Why it exists |
 |---|---|
-| `id` | Permanent identifier. Survives renames, moves, and supersession — it is what people cite |
+| `id` | Permanent identifier. Survives renames, moves, and supersession - it is what people cite |
 | `type` | Which kind of document this is |
 | `status` | How sure we are. See the table in the main README |
 | `created` / `updated` | Health policy moves; dates matter |
 | `authors` | People. Never AI tools |
 | `topics` / `related` | How the corpus connects to itself |
 | `supersedes` / `superseded_by` | The trail when we change our minds |
-| `ai_disclosure` | How AI was used. Required — see [AI_USE_POLICY.md](../AI_USE_POLICY.md) |
+| `ai_disclosure` | How AI was used. Required - see [AI_USE_POLICY.md](../about/how-we-use-ai.md) |
 | `signed_off_by` | The person who checked the claims and takes responsibility |
 | `clinical_review_by` | Required for clinical claims |
 | `sources` | Paths into `sources/`, so a claim resolves to the thing it came from |
@@ -34,5 +34,5 @@ Renaming or renumbering breaks citations, breaks the provenance chain, and break
 anchored to it.
 
 **`status` here is not a workflow state.** It says how much epistemic weight the project puts
-behind a claim — not how far along it is. A document can be finished and still be a
+behind a claim - not how far along it is. A document can be finished and still be a
 `hypothesis`.

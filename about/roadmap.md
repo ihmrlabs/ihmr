@@ -16,8 +16,8 @@ tested against reality yet.
 What is IHMR actually trying to achieve, and what would count as success?
 
 ### 1. Establish the evidence base ← *we are here*
-Understand India's health system properly — its burden of disease, delivery, workforce,
-financing, and digital infrastructure — before proposing anything. Then look carefully at what
+Understand India's health system properly - its burden of disease, delivery, workforce,
+financing, and digital infrastructure - before proposing anything. Then look carefully at what
 other countries have tried.
 
 ### 2. Define the primitives
@@ -28,7 +28,7 @@ the vocabulary right, because everything downstream inherits it.
 Identity, information, action, routing, financing, trust, intelligence, delivery.
 
 ### 4. Simulate it
-Synthetic people, cohorts, districts, pathways, and constraints — in
+Synthetic people, cohorts, districts, pathways, and constraints - in
 [`ihmr-engine`](https://github.com/ihmrlabs/ihmr-engine).
 
 ### 5. Stress-test it
@@ -47,7 +47,7 @@ What would actually need to exist for something like this to operate in India?
 ## What we are working on now
 
 Live status is on [projectihmr.com](https://projectihmr.com), derived from this repository, so
-it cannot drift out of date. [`updates/`](updates/) has the log.
+it cannot drift out of date. [`updates/`](../updates/) has the log.
 
 ## Where we would most like help
 
@@ -55,9 +55,9 @@ Right now, at stage 1: **anything that makes our picture of India's health syste
 Corrections, missing sources, things we have characterised badly, and field knowledge that never
 made it into the literature.
 
-See [`questions/`](questions/) and [CONTRIBUTING.md](CONTRIBUTING.md).
+See [`questions/`](../questions/) and [CONTRIBUTING.md](../.github/CONTRIBUTING.md).
 
 ## A caveat
 
-This roadmap is a plan, not a promise. It will change as we learn things — and when it does, we
+This roadmap is a plan, not a promise. It will change as we learn things - and when it does, we
 will say what changed and why.

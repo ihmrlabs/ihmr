@@ -1,6 +1,6 @@
 # Experiments
 
-Things we tested, and what actually happened — run in
+Things we tested, and what actually happened - run in
 [`ihmr-engine`](https://github.com/ihmrlabs/ihmr-engine).
 
 Each experiment records its question, method, inputs, rules, random seed, the engine commit it

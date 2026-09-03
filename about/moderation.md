@@ -11,7 +11,7 @@ polite way of saying "we only publish people who agree with us." That is not wha
 - **Disagreement is the point.** We need correction more than agreement, and a critical comment
   is more useful to us than a supportive one. Being wrong in public is how this project improves.
 - **But personal health information should not end up on a public website**, whether it is yours
-  or someone else's — and people share it without meaning to, especially on a health project.
+  or someone else's - and people share it without meaning to, especially on a health project.
 - **And medical misinformation attached to our name causes real harm.** We would rather be slow
   than be a distribution channel for it.
 
@@ -21,7 +21,7 @@ So: a human reads everything, and nothing appears until they do.
 
 1. You write a comment and verify your email address once.
 2. Your comment goes into a queue. It is not visible to anyone yet.
-3. A person reads it — usually within a day or two.
+3. A person reads it - usually within a day or two.
 4. It is either published, or you get an email explaining why not.
 
 Your email address is never shown publicly, never shared, and never appears in our API, feeds,
@@ -48,7 +48,7 @@ own patterns:
 **"We disagree with it" is not on this list, and never will be.**
 
 If your comment is not published, you will get the reason and, where it would help, a note on
-what could change. **You are welcome to revise it and try again** — that is not a strike against
+what could change. **You are welcome to revise it and try again** - that is not a strike against
 you, and most rejections are fixable in a sentence or two.
 
 ## If you think we got it wrong
@@ -57,7 +57,7 @@ Email hello@projectihmr.com and say so. We will look again, and a person will re
 
 ## What we publish about moderation
 
-We publish aggregate numbers — how many comments we received, how many we published, and the
+We publish aggregate numbers - how many comments we received, how many we published, and the
 reasons for the rest. Individual decisions stay private; the pattern does not.
 
 A project built on working in the open should not have a part of it you cannot see into.

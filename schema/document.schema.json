@@ -151,6 +151,11 @@
       ],
       "pattern": "^10\\.[0-9]{4,9}/.+$",
       "description": "DataCite DOI, minted via Zenodo. Reserved before publication so the document can contain its own identifier. Research and essays only."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Publication version. Increments when a materially revised edition is issued. Earlier versions stay in the repository unchanged, because they have been cited."
     }
   },
   "allOf": [
@@ -219,6 +224,26 @@
           "doi"
         ],
         "description": "Published research and essays must carry a DOI so they are citable."
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "enum": [
+              "research",
+              "essay"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "required": [
+          "version"
+        ]
       }
     }
   ]

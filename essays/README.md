@@ -13,3 +13,8 @@ does not mean rewriting an essay.
 If you disagree with one, that is more or less what they are for.
 
 Usually `hypothesis` or `proposal`.
+
+## How essays are stored
+
+Same structure as research: a folder per essay, a folder per published version, Markdown and a
+generated PDF inside each. See [`research/README.md`](../research/README.md) for the reasoning.

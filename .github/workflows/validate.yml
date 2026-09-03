@@ -10,11 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-python@v5
         with:
-          node-version: '22'
-      # Validates every document's front matter against schema/document.schema.json,
-      # so a malformed document cannot merge and break website ingestion.
-      # Implementation lands with the first content document.
+          python-version: '3.12'
+      # A malformed document would break website ingestion silently,
+      # so it fails here instead.
       - name: Validate front matter
-        run: echo "Validator to be implemented alongside the first content document."
+        run: python3 schema/validate.py .

@@ -1,3 +1,19 @@
+---
+id: IHMR-PAGE-003
+type: page
+title: Comment Moderation
+status: current
+created: 2026-09-03
+updated: 2026-09-03
+ai_disclosure: substantially-ai-assisted
+ai_tools:
+  - claude-opus-5
+signed_off_by:
+signed_off_date:
+license: CC-BY-4.0
+lang: en
+---
+
 # Comment Moderation
 
 **Every comment on [projectihmr.com](https://projectihmr.com) is read by a person before it is

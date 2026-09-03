@@ -1,3 +1,19 @@
+---
+id: IHMR-PAGE-006
+type: page
+title: Privacy
+status: current
+created: 2026-09-03
+updated: 2026-09-03
+ai_disclosure: substantially-ai-assisted
+ai_tools:
+  - claude-opus-5
+signed_off_by:
+signed_off_date:
+license: CC-BY-4.0
+lang: en
+---
+
 # Privacy
 
 **Last updated: 3 September 2026**

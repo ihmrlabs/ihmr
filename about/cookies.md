@@ -1,3 +1,19 @@
+---
+id: IHMR-PAGE-008
+type: page
+title: Cookies
+status: current
+created: 2026-09-03
+updated: 2026-09-03
+ai_disclosure: substantially-ai-assisted
+ai_tools:
+  - claude-opus-5
+signed_off_by:
+signed_off_date:
+license: CC-BY-4.0
+lang: en
+---
+
 # Cookies
 
 **Last updated: 3 September 2026**

@@ -4,50 +4,222 @@
   "title": "IHMR Document",
   "description": "Front matter required on every document in the ihmr repository.",
   "type": "object",
-  "required": ["id", "type", "title", "status", "created", "updated", "ai_disclosure", "license", "lang"],
+  "required": [
+    "id",
+    "type",
+    "title",
+    "status",
+    "created",
+    "updated",
+    "ai_disclosure",
+    "license",
+    "lang"
+  ],
   "additionalProperties": false,
   "properties": {
     "id": {
       "type": "string",
-      "pattern": "^IHMR-(ESS|RSCH|Q|RFC|DEC|EXP|ARCH|SRC)-[0-9]{3,}$",
+      "pattern": "^IHMR-(ESS|RSCH|Q|RFC|DEC|EXP|ARCH|SRC|PAGE)-[0-9]{3,}$",
       "description": "Permanent identifier. Never changes, never reused."
     },
     "type": {
-      "enum": ["essay", "research", "question", "rfc", "decision", "experiment", "architecture", "source"]
+      "enum": [
+        "essay",
+        "research",
+        "question",
+        "rfc",
+        "decision",
+        "experiment",
+        "architecture",
+        "source",
+        "page"
+      ]
     },
-    "title": { "type": "string", "minLength": 3 },
+    "title": {
+      "type": "string",
+      "minLength": 3
+    },
     "status": {
-      "enum": ["hypothesis", "evidence", "proposal", "specification", "experiment", "decision", "superseded"],
-      "description": "Epistemic weight the project gives this document. Not a workflow state."
+      "enum": [
+        "hypothesis",
+        "evidence",
+        "proposal",
+        "specification",
+        "experiment",
+        "decision",
+        "superseded",
+        "current"
+      ],
+      "description": "Epistemic weight for research documents. Pages of project or site policy use 'current' or 'superseded' instead, because a privacy policy has versions but not epistemic weight."
     },
-    "authors": { "type": "array", "items": { "type": "string" } },
-    "created": { "type": "string", "format": "date" },
-    "updated": { "type": "string", "format": "date" },
-    "topics": { "type": "array", "items": { "type": "string" } },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "related": {
       "type": "array",
-      "items": { "type": "string", "pattern": "^IHMR-[A-Z]+-[0-9]{3,}$" }
+      "items": {
+        "type": "string",
+        "pattern": "^IHMR-[A-Z]+-[0-9]{3,}$"
+      }
     },
-    "supersedes": { "type": ["string", "null"], "pattern": "^IHMR-[A-Z]+-[0-9]{3,}$" },
-    "superseded_by": { "type": ["string", "null"], "pattern": "^IHMR-[A-Z]+-[0-9]{3,}$" },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^IHMR-[A-Z]+-[0-9]{3,}$"
+    },
+    "superseded_by": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^IHMR-[A-Z]+-[0-9]{3,}$"
+    },
     "ai_disclosure": {
-      "enum": ["none", "ai-assisted-editing", "ai-assisted-research", "substantially-ai-assisted", "ai-generated-draft"]
+      "enum": [
+        "none",
+        "ai-assisted-editing",
+        "ai-assisted-research",
+        "substantially-ai-assisted",
+        "ai-generated-draft"
+      ]
     },
-    "ai_tools": { "type": "array", "items": { "type": "string" } },
+    "ai_tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "signed_off_by": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "A named person. Never a role, team, or organisation. Never an AI."
     },
-    "signed_off_date": { "type": ["string", "null"], "format": "date" },
-    "sources": { "type": "array", "items": { "type": "string" } },
-    "clinical_review_by": { "type": ["string", "null"] },
-    "license": { "enum": ["CC-BY-4.0", "Apache-2.0"] },
-    "lang": { "type": "string", "default": "en" }
+    "signed_off_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "clinical_review_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license": {
+      "enum": [
+        "CC-BY-4.0",
+        "Apache-2.0"
+      ]
+    },
+    "lang": {
+      "type": "string",
+      "default": "en"
+    },
+    "doi": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^10\\.[0-9]{4,9}/.+$",
+      "description": "DataCite DOI, minted via Zenodo. Reserved before publication so the document can contain its own identifier. Research and essays only."
+    }
   },
   "allOf": [
     {
-      "if": { "properties": { "status": { "const": "superseded" } }, "required": ["status"] },
-      "then": { "required": ["superseded_by"] }
+      "if": {
+        "properties": {
+          "status": {
+            "const": "superseded"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "superseded_by"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "page"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "enum": [
+              "current",
+              "superseded"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "enum": [
+              "research",
+              "essay"
+            ]
+          },
+          "status": {
+            "enum": [
+              "evidence",
+              "decision"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "doi"
+        ],
+        "description": "Published research and essays must carry a DOI so they are citable."
+      }
     }
   ]
 }

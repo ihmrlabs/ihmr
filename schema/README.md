@@ -25,9 +25,30 @@ text and we will handle the metadata.
 | `signed_off_by` | The person who checked the claims and takes responsibility |
 | `clinical_review_by` | Required for clinical claims |
 | `sources` | Paths into `sources/`, so a claim resolves to the thing it came from |
+| `doi` | Minted for research and essays once they reach `evidence` or `decision`. See below |
 | `lang` | Currently always `en` |
 
+## Two kinds of document
+
+**Research documents** - research, essays, questions, RFCs, decisions, experiments, architecture
+- carry an epistemic `status`: how much weight we put behind the claim.
+
+**Pages** - governance, privacy, the glossary, and so on - carry `status: current` or
+`superseded` instead. A privacy policy has versions, but it does not have epistemic weight, and
+labelling one a `hypothesis` would be nonsense.
+
+## DOIs
+
+Research articles and essays get a DOI once they reach `evidence` or `decision`, so they can be
+cited formally. The schema requires it at those statuses.
+
+Questions, RFCs, decisions and pages do not. They are living documents, and minting a permanent
+identifier for something designed to keep changing would mislead whoever cited it.
+
 ## Two rules worth knowing
+
+**Validation runs in CI.** `schema/validate.py` checks every document on each pull request, so
+a malformed one cannot merge and break the website quietly.
 
 **IDs are permanent.** Once a document is published, its ID is cited and its path is linked.
 Renaming or renumbering breaks citations, breaks the provenance chain, and breaks every comment

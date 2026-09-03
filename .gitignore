@@ -1,0 +1,16 @@
+# Editor and OS
+.DS_Store
+.vscode/
+.idea/
+
+# Local build or validation output
+node_modules/
+.venv/
+__pycache__/
+*.tmp
+.cache/
+
+# Environment
+.env
+.env.*
+!.env.example

@@ -45,10 +45,23 @@ lang: en
 
 ## 0. How to read this
 
-This article is dated September 2026. Much of the data in it is not, and you should know that before you read a single number.
+**This article was written in September 2026. Much of the data in it was not**, and that gap is the first thing to understand about Indian health data.
 
-India has not counted its population since 2011. The 2021 census was postponed because of COVID-19, and the 16th census - Census 2027 - was notified in the Gazette of India on 16 June 2025 (S.O. 2681(E), under the Census Act 1948) with a reference date of 00:00 hours on 1 March 2027, and 1 October 2026 for Ladakh and the snow-bound areas of Jammu & Kashmir, Himachal Pradesh and Uttarakhand. That means every official population denominator in this article - the totals, the age shares, the urban share - rests on projections published in July 2020 from a census base that is now fifteen years old. The same vintage problem runs through the whole system: the latest facility census is as on 31 March 2023, the latest National Health Accounts describe 2022-23, the only national treatment-cascade measurements come from surveys fielded in 2017-21, and the newest household survey (NFHS-6, fieldwork 2023-24, fact sheets released May 2026) is still labelled provisional. We state the data period next to every figure. This is not an apology; it is one of the findings. A health system's ability to describe itself is part of its condition, and anyone serious about Indian health data checks the dates before the values.
+Start with the census, because almost everything else rests on it. **India has not counted its population since 2011.** The next census was due in 2021 and was postponed because of COVID-19. The 16th census was finally notified in the Gazette of India on 16 June 2025 (S.O. 2681(E), under the Census Act 1948), with a reference date of 1 March 2027 - and 1 October 2026 for Ladakh and the snow-bound areas of Jammu & Kashmir, Himachal Pradesh and Uttarakhand.
 
+That means the count India is planning from will be **sixteen years old** by the time it is replaced. Every official population figure below - the totals, the age shares, the urban share - is a projection published in July 2020 from a 2011 base.
+
+The same problem runs through the rest of the system:
+
+| What | Most recent available | As of September 2026 |
+|:--|:--|:--|
+| Population count | Census 2011 | 15 years old |
+| Facility census | Health Dynamics of India, as on 31 March 2023 | 3 years old |
+| Health accounts | NHA 2022-23 | 3 years old |
+| Treatment cascades | Surveys fielded 2017-21 | 5-9 years old |
+| Household survey | NFHS-6, fieldwork 2023-24 | released May 2026, still provisional |
+
+So we state the data period next to every figure. **This is not an apology; it is one of the findings.** A health system's ability to describe itself is part of its condition, and anyone serious about Indian health data checks the dates before the values.
 Three rules govern what follows. First, only claims that survived independent verification against primary sources appear here; where a verified claim was later superseded by a newer official release (several were, between the first draft and this one), the newer figure is used and the older one kept for the trend. Second, where credible sources disagree - and they disagree on things as basic as how many people live in India - we report the range and do not average. Third, where a number in this article is our own arithmetic (for example, applying a survey percentage to a population estimate), it is labelled *derived* and the inputs are named.
 
 Sections 1 to 9 lay out the facts: who the people are, what they suffer and die from, how much of their illness is found and treated, how long they live, who delivers and pays for care, and what the digital layer records. Section 10 turns those facts into a single table: the questions India's health information systems can and cannot currently answer. Section 11 lists what we could not establish at all. Section 12 gives the sources in full.

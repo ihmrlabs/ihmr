@@ -34,11 +34,19 @@ def parse_fm(text):
     return out
 
 SKIP_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md"}
+
+# Not corpus documents. technicals/ explains how this repository is operated -
+# how publishing works, what the branch rules are, where things land in R2 -
+# which is the same kind of thing as README or CONTRIBUTING, not a research
+# claim. Front matter carries a status and a publication state, and neither
+# means anything for a document that is simply true of how the repo runs.
+SKIP_DIRS = (".github/", "technicals/")
+
 problems, checked = [], 0
 
 for f in sorted(root.rglob("*.md")):
     rel = f.relative_to(root).as_posix()
-    if ".git/" in rel or rel.startswith(".github/") or f.name in SKIP_NAMES:
+    if ".git/" in rel or rel.startswith(SKIP_DIRS) or f.name in SKIP_NAMES:
         continue
     fm = parse_fm(f.read_text())
     if fm is None:

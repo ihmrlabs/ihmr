@@ -25,23 +25,46 @@ gh api -X PUT repos/ihmrlabs/ihmr/branches/main/protection \
 | **Block deletions** | Self-explanatory |
 | Apply to administrators | The person most likely to push to main at midnight is the maintainer |
 
-## Publication branches
+## Rules for `submit-papers`
 
-`submit-paper/**` is deliberately **not** protected. It is a working branch: push to it as often
-as you like, and every push runs a dry run that mints nothing.
+**Protected exactly like `main`**, and for a sharper reason: merging into it mints permanent
+DOIs.
 
-The protection that matters is not on that branch. It is that **minting requires a manual run
-with `dry_run` unticked**, so no push, rebase or rerun can ever create a permanent DOI by
-accident.
+```bash
+gh api -X PUT repos/ihmrlabs/ihmr/branches/submit-papers/protection \
+  --input technicals/branch-protection.json
+```
+
+Same rules, same reasoning. Requiring a pull request means somebody reviews what is about to
+become permanently citable, and blocking force pushes means the branch cannot be rewritten
+underneath a run.
+
+## What actually keeps this safe
+
+Not the branch protection, useful though it is. **The idempotency.**
+
+What publishes is decided by the state of the papers, not by the push that triggered the run. A
+paper is eligible when it is signed off, has no DOI, and carries a publishable status. Once it
+has a DOI it is never eligible again.
+
+So re-running a failed job publishes nothing. Merging a stale branch publishes nothing. Pushing
+twice publishes nothing. The only way to mint is to make a paper eligible, which means signing
+it off, which is a deliberate act by a named person.
 
 ## The flow
 
 ```text
-git checkout -b submit-paper/IHMR-RSCH-001-state-of-indias-healthcare-v1
-git push                          → dry run, mints nothing, tells you what would happen
-                                  → repeat until clean
-Actions → Publish → dry_run off   → mints the DOI, builds the PDF, opens a PR
-merge the PR                      → lands on main, having been reviewed
+finish a paper, set signed_off_by
+        ↓
+open a pull request into submit-papers
+        → dry run: lists exactly what merging would publish. Mints nothing.
+        ↓
+merge it
+        → mints a DOI for every eligible paper
+        → builds each PDF, with its DOI inside it
+        → deposits to Zenodo, into the ihmr community
+        → opens a pull request into main
+        ↓
+merge that
+        → syncs to R2, re-ingests, goes live
 ```
-
-Nothing is minted at merge, because it already happened on the branch. Merging is just merging.

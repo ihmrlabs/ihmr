@@ -14,50 +14,62 @@ that.
 ## The flow
 
 ```text
-git checkout -b submit-paper/IHMR-RSCH-001-state-of-indias-healthcare-v1
-git push
+finish a paper, set signed_off_by in its front matter
         ↓
-   DRY RUN, on every push
-   validates the corpus, checks the signature, confirms no DOI exists yet,
-   builds the PDF, reports what would happen
+open a pull request into submit-papers
+        ↓
+   DRY RUN
+   validates the corpus, lists exactly which papers merging would publish
    MINTS NOTHING
         ↓
-   repeat until clean. push as often as you like.
+   merge it
         ↓
-Actions → Publish a research version → run from this branch, dry_run UNTICKED
+   for every eligible paper:
+     reserve the DOI
+     write it into the article and the manifest
+     build the PDF, so it carries its own identifier
+     deposit to Zenodo, into the ihmr community
         ↓
-   reserve the DOI
-   write it into the article and the manifest
-   rebuild the PDF, so it carries its own identifier
-   deposit both to Zenodo, into the ihmr community
-   open a pull request into main
+   opens a pull request into main
         ↓
-   merge the pull request
-   nothing is minted at merge. it already happened.
+   merge that → syncs to R2, re-ingests, goes live
 ```
 
-## Why a push cannot publish
+## What decides which papers publish
 
-The obvious design is that pushing to a publication branch publishes. It is wrong here, and the
-reason is worth stating because it is not obvious.
+**The state of the papers, never the push.** A paper is eligible when all three hold:
 
-**A push is the easiest thing in git to do by accident.** An amend and force push, a stale branch
-someone pushes to, a re-run of a failed job, a rebase onto a moved main. With push-to-publish,
-`git push --force` becomes an irreversible act, which is a terrible property for a command people
-use casually.
+| | |
+|:--|:--|
+| It is signed off | `signed_off_by` is set in the version front matter |
+| It has no DOI | the manifest records none for that version |
+| It is publishable | status is `evidence` or `decision`, not `hypothesis` |
 
-So the branch is still the unit of work and the record of intent. Only the irreversible step
-needs a person to choose it, on a branch that has already proved it would work.
+Check at any time with:
 
-## Branch naming
-
-```text
-submit-paper/<work-folder>-v<version>
-submit-paper/IHMR-RSCH-001-state-of-indias-healthcare-v1
+```bash
+python3 schema/eligible_for_publication.py .
 ```
 
-The workflow parses the work and the version out of the branch name, so nobody types them twice
-and the two cannot disagree.
+### Why this is what makes it safe
+
+**It is idempotent.** Once a paper has a DOI it is never eligible again, so:
+
+- re-running a failed job publishes nothing
+- merging a stale branch publishes nothing
+- pushing twice publishes nothing
+
+The only way to mint a DOI is to make a paper eligible, and the only way to do that is to sign it
+off. Which is a deliberate act by a named person, which is exactly where the decision belongs.
+
+Compare the alternative, where a branch name or a push event decides what publishes. There, an
+accidental force push mints something permanent. Here it does nothing at all, because the state
+has not changed.
+
+### One paper failing does not strand the others
+
+Each is published independently. Those that succeed keep their DOIs and reach the pull request;
+those that fail are reported and stay eligible for the next run.
 
 ## What stops a publication
 

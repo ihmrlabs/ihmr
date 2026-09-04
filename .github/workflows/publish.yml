@@ -1,45 +1,31 @@
-name: Publish a research version
+name: Publish
 
-# Publishing mints a DOI, and a published DOI cannot be deleted. Every other
-# action in this repository is repeatable; this one is not. So the trigger has
-# to be harder than a push, not easier.
+# Publishing mints DOIs, and a published DOI cannot be deleted.
+#
+# What gets published is decided by the state of the papers, not by the push
+# that triggered the run. A paper is eligible when it is signed off, has no DOI
+# yet, and carries a publishable status. See schema/eligible_for_publication.py.
+#
+# That makes the whole thing idempotent, which is what makes it safe. Re-running
+# a failed job, merging a stale branch, or pushing twice publishes nothing:
+# everything eligible already has a DOI, so nothing is eligible any more.
 #
 # The flow:
 #
-#   1. Branch as submit-paper/<work>-v<n> and push.
-#      Every push runs a DRY RUN: validate, check the signature, build the PDF,
-#      report exactly what would happen. Nothing is minted. Push as often as
-#      you like.
+#   PR into submit-papers   → dry run. Lists what would publish. Mints nothing.
+#   merge to submit-papers  → mints for every eligible paper, opens a PR to main
+#   merge that PR to main   → syncs, ingests, goes live
 #
-#   2. When the dry run is clean, run this workflow manually from that branch
-#      with dry_run unticked. That mints the DOI, writes it into the article
-#      and the manifest, rebuilds the PDF so it carries its own identifier,
-#      deposits to Zenodo, and opens a pull request into main.
-#
-#   3. Merge the pull request. Nothing is minted at merge, because it already
-#      happened. Merging is just merging.
-#
-# A rebase, a force push or a rerun therefore cannot mint anything. The
-# irreversible step needs a person to choose it, on a branch that already
-# proved it would work.
+# submit-papers is protected exactly like main, so reaching it needs a reviewed
+# pull request. Nobody publishes by pushing.
 
 on:
   push:
-    branches:
-      - 'submit-paper/**'
+    branches: [submit-papers]
+  pull_request:
+    branches: [submit-papers]
   workflow_dispatch:
     inputs:
-      work:
-        description: 'Work folder, e.g. IHMR-RSCH-001-state-of-indias-healthcare'
-        required: true
-      version:
-        description: 'Version number'
-        required: true
-        default: '1'
-      dry_run:
-        description: 'Dry run. Untick only when you mean to mint a real DOI.'
-        type: boolean
-        default: true
       sandbox:
         description: 'Use the Zenodo sandbox (fake DOIs, for rehearsal)'
         type: boolean
@@ -50,8 +36,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  # Never two runs against the same paper at once.
-  group: publish-${{ github.ref }}
+  group: publish
   cancel-in-progress: false
 
 jobs:
@@ -69,201 +54,163 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
 
-      # A push to submit-paper/IHMR-RSCH-001-state-of-indias-healthcare-v1
-      # tells us which paper without anyone typing it twice.
-      - name: Work out what is being published
-        id: target
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            REF="${GITHUB_REF#refs/heads/submit-paper/}"
-            WORK="${REF%-v*}"
-            VERSION="${REF##*-v}"
-            DRY=true
-          else
-            WORK="${{ inputs.work }}"
-            VERSION="${{ inputs.version }}"
-            DRY="${{ inputs.dry_run }}"
-          fi
-
-          if [ ! -d "research/$WORK/v$VERSION" ]; then
-            echo "::error::No such version: research/$WORK/v$VERSION"
-            echo "Branch names must be submit-paper/<work-folder>-v<number>."
-            exit 1
-          fi
-
-          echo "work=$WORK"       >> "$GITHUB_OUTPUT"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "dry=$DRY"         >> "$GITHUB_OUTPUT"
-          echo "Publishing $WORK v$VERSION (dry run: $DRY)"
-
       - name: Validate the corpus
         run: |
           python3 schema/validate.py .
           python3 schema/validate_manifests.py .
 
-      # The gate. A DOI is permanent, so nothing is minted for research that
-      # no person has verified.
-      - name: Check it has been signed off
+      - name: Work out what is eligible
+        id: scan
         run: |
-          python3 - "research/${{ steps.target.outputs.work }}" "${{ steps.target.outputs.version }}" <<'PY'
-          import json, pathlib, re, sys
-          work, version = pathlib.Path(sys.argv[1]), int(sys.argv[2])
-          manifest = json.loads((work / "manifest.json").read_text())
-          entry = next(v for v in manifest["versions"] if v["version"] == version)
-          text = (work / f"v{version}" / entry["document"]).read_text()
-          m = re.search(r"^signed_off_by:[ \t]*(.*)$", text, re.M)
-          signer = m.group(1).strip() if m else ""
-          if not signer:
-              print("::error::Nobody has signed off on this version.")
-              print("A DOI is permanent. Set signed_off_by before publishing.")
-              sys.exit(1)
-          print(f"Signed off by: {signer}")
-          PY
+          python3 schema/eligible_for_publication.py . | tee /tmp/report.txt
+          echo "papers=$(python3 schema/eligible_for_publication.py . --json)" >> "$GITHUB_OUTPUT"
+          COUNT=$(python3 -c "
+          import json,subprocess
+          print(json.loads(subprocess.check_output(
+            ['python3','schema/eligible_for_publication.py','.','--json']))['count'])")
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
 
-      - name: Refuse to mint twice
-        if: steps.target.outputs.dry == 'false'
+      # A pull request into submit-papers is the rehearsal. It reports exactly
+      # what a merge would publish, and mints nothing.
+      - name: Dry run report
+        if: github.event_name == 'pull_request'
         run: |
-          W="research/${{ steps.target.outputs.work }}"
-          V="${{ steps.target.outputs.version }}"
-          DOI=$(python3 -c "
-          import json
-          m = json.load(open('$W/manifest.json'))
-          e = next(v for v in m['versions'] if v['version'] == $V)
-          print(e.get('doi') or '')")
-          if [ -n "$DOI" ]; then
-            echo "::error::This version already has a DOI: $DOI"
-            echo "Minting again would create a second permanent identifier for the same work."
-            echo "If it genuinely needs a new one, that is a new version."
-            exit 1
-          fi
+          {
+            echo "## What merging this would publish"
+            echo
+            echo '```'
+            cat /tmp/report.txt
+            echo '```'
+            echo
+            if [ "${{ steps.scan.outputs.count }}" = "0" ]; then
+              echo "**Nothing would be published.** Every paper is either unsigned, already"
+              echo "published, or not in a publishable status."
+            else
+              echo "**Merging this would mint ${{ steps.scan.outputs.count }} permanent DOI(s).**"
+              echo "A DOI cannot be deleted. Check the signatures before approving."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Nothing to do
+        if: github.event_name != 'pull_request' && steps.scan.outputs.count == '0'
+        run: |
+          echo "Nothing is eligible. This is the normal outcome for a re-run." >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/report.txt >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install pandoc and LaTeX
+        if: github.event_name != 'pull_request' && steps.scan.outputs.count != '0'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
             pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
 
-      # ---------- Dry run stops here ----------
-
-      - name: Dry run report
-        if: steps.target.outputs.dry == 'true'
-        run: |
-          W="research/${{ steps.target.outputs.work }}"
-          V="${{ steps.target.outputs.version }}"
-          echo "### Ready to publish" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| | |" >> "$GITHUB_STEP_SUMMARY"
-          echo "|:--|:--|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Work | \`${{ steps.target.outputs.work }}\` |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Version | $V |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Signed off | yes |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Existing DOI | none |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Charts | $(ls $W/v$V/visualisations/*.json 2>/dev/null | wc -l) |" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Nothing was minted.** To publish for real, run this workflow" >> "$GITHUB_STEP_SUMMARY"
-          echo "manually from this branch with \`dry_run\` unticked." >> "$GITHUB_STEP_SUMMARY"
-
       # ---------- Everything below only runs for a real publication ----------
 
-      - name: Reserve the DOI
-        if: steps.target.outputs.dry == 'false'
+      - name: Publish every eligible paper
+        if: github.event_name != 'pull_request' && steps.scan.outputs.count != '0'
         env:
           ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
-          ZENODO_SANDBOX: ${{ inputs.sandbox && '1' || '0' }}
-          ZENODO_COMMUNITY: ${{ inputs.sandbox && '' || 'ihmr' }}
+          ZENODO_SANDBOX: ${{ github.event_name == 'workflow_dispatch' && inputs.sandbox && '1' || '0' }}
+          ZENODO_COMMUNITY: ${{ github.event_name == 'workflow_dispatch' && inputs.sandbox && '' || 'ihmr' }}
         run: |
-          python3 engine/apps/publish/mint_doi.py reserve \
-            --work "research/${{ steps.target.outputs.work }}" \
-            --version ${{ steps.target.outputs.version }}
+          PAPERS='${{ steps.scan.outputs.papers }}'
+          echo "$PAPERS" | python3 -c "
+          import json, subprocess, sys, pathlib, re
 
-      - name: Write the DOI into the article and the manifest
-        if: steps.target.outputs.dry == 'false'
-        run: |
-          python3 - "research/${{ steps.target.outputs.work }}" "${{ steps.target.outputs.version }}" <<'PY'
-          import json, pathlib, re, sys
-          work, version = pathlib.Path(sys.argv[1]), int(sys.argv[2])
-          doi = json.loads((work / f"v{version}" / ".zenodo.json").read_text())["doi"]
-          manifest = json.loads((work / "manifest.json").read_text())
-          entry = next(v for v in manifest["versions"] if v["version"] == version)
+          papers = json.load(sys.stdin)['papers']
+          published, failed = [], []
 
-          # Into the article, so the PDF built from it carries its own identifier.
-          p = work / f"v{version}" / entry["document"]
-          p.write_text(re.sub(r"^doi:.*$", f"doi: {doi}", p.read_text(), count=1, flags=re.M))
+          for p in papers:
+              work = pathlib.Path(p['folder']) / p['work']
+              version = p['version']
+              print(f'--- {p[\"work\"]} v{version} ---', flush=True)
 
-          # Into the manifest, so the site's citation block can show it.
-          entry["doi"] = doi
-          if not manifest.get("conceptDoi"):
-              manifest["conceptDoi"] = doi
-          (work / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-          print(f"Recorded {doi}")
-          PY
+              try:
+                  subprocess.run(['python3', 'engine/apps/publish/mint_doi.py', 'reserve',
+                                  '--work', str(work), '--version', str(version)], check=True)
 
-      - name: Build the PDF
-        if: steps.target.outputs.dry == 'false'
-        run: |
-          python3 engine/apps/publish/build_pdf.py \
-            --work "research/${{ steps.target.outputs.work }}" \
-            --version ${{ steps.target.outputs.version }}
-          python3 - "research/${{ steps.target.outputs.work }}" "${{ steps.target.outputs.version }}" <<'PY'
-          import json, pathlib, sys
-          work, version = pathlib.Path(sys.argv[1]), int(sys.argv[2])
-          manifest = json.loads((work / "manifest.json").read_text())
-          entry = next(v for v in manifest["versions"] if v["version"] == version)
-          pdfs = list((work / f"v{version}").glob("*.pdf"))
-          if pdfs:
-              entry["pdf"] = pdfs[0].name
-              (work / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-              print(f"Recorded {pdfs[0].name}")
-          PY
+                  doi = json.loads((work / f'v{version}' / '.zenodo.json').read_text())['doi']
 
-      - name: Deposit and publish
-        if: steps.target.outputs.dry == 'false'
-        env:
-          ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
-          ZENODO_SANDBOX: ${{ inputs.sandbox && '1' || '0' }}
-          ZENODO_COMMUNITY: ${{ inputs.sandbox && '' || 'ihmr' }}
-        run: |
-          python3 engine/apps/publish/mint_doi.py publish \
-            --work "research/${{ steps.target.outputs.work }}" \
-            --version ${{ steps.target.outputs.version }}
+                  # Into the article, so the PDF built from it carries its own
+                  # identifier. A PDF travels away from the site and a copy
+                  # without its DOI cannot be cited.
+                  manifest = json.loads((work / 'manifest.json').read_text())
+                  entry = next(v for v in manifest['versions'] if v['version'] == version)
+                  doc = work / f'v{version}' / entry['document']
+                  doc.write_text(re.sub(r'^doi:.*$', f'doi: {doi}', doc.read_text(), count=1, flags=re.M))
+
+                  entry['doi'] = doi
+                  if not manifest.get('conceptDoi'):
+                      manifest['conceptDoi'] = doi
+                  (work / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+
+                  subprocess.run(['python3', 'engine/apps/publish/build_pdf.py',
+                                  '--work', str(work), '--version', str(version)], check=True)
+
+                  pdfs = list((work / f'v{version}').glob('*.pdf'))
+                  if pdfs:
+                      entry['pdf'] = pdfs[0].name
+                      (work / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+
+                  subprocess.run(['python3', 'engine/apps/publish/mint_doi.py', 'publish',
+                                  '--work', str(work), '--version', str(version)], check=True)
+
+                  (work / f'v{version}' / '.zenodo.json').unlink(missing_ok=True)
+                  published.append((p['work'], version, doi))
+
+              except subprocess.CalledProcessError as e:
+                  # One paper failing must not strand the others. Those already
+                  # minted keep their DOIs and still reach the pull request.
+                  print(f'FAILED: {e}', file=sys.stderr)
+                  failed.append((p['work'], version, str(e)))
+
+          pathlib.Path('/tmp/published.json').write_text(json.dumps({
+              'published': published, 'failed': failed,
+          }))
+          print(f'\nPublished {len(published)}, failed {len(failed)}')
+          "
 
       - name: Validate again, now that files have changed
-        if: steps.target.outputs.dry == 'false'
+        if: github.event_name != 'pull_request' && steps.scan.outputs.count != '0'
         run: |
           python3 schema/validate.py .
           python3 schema/validate_manifests.py .
 
-      # A pull request rather than a push, so a person sees the DOI, the PDF and
-      # the manifest change before any of it reaches main.
+      # A pull request into main rather than a push, so a person sees every DOI
+      # and PDF before any of it becomes part of the corpus.
       - name: Open a pull request into main
-        if: steps.target.outputs.dry == 'false'
+        if: github.event_name != 'pull_request' && steps.scan.outputs.count != '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          W="research/${{ steps.target.outputs.work }}"
-          V="${{ steps.target.outputs.version }}"
-          DOI=$(python3 -c "
-          import json
-          m = json.load(open('$W/manifest.json'))
-          e = next(v for v in m['versions'] if v['version'] == $V)
-          print(e['doi'])")
-
-          rm -f "$W/v$V/.zenodo.json"
+          BRANCH="published/${{ github.run_id }}"
           git config user.name "stages"
           git config user.email "stages@fanpit.live"
+          git checkout -b "$BRANCH"
           git add -A
-          git commit -m "Publish ${{ steps.target.outputs.work }} v$V
 
-          DOI: $DOI
-          Built the PDF and recorded both in the manifest."
-          git push origin HEAD
+          SUMMARY=$(python3 -c "
+          import json
+          d = json.load(open('/tmp/published.json'))
+          for w, v, doi in d['published']:
+              print(f'- {w} v{v}: {doi}')
+          if d['failed']:
+              print()
+              print('Failed:')
+              for w, v, e in d['failed']:
+                  print(f'- {w} v{v}: {e}')
+          ")
 
-          gh pr create \
-            --base main \
-            --title "Publish ${{ steps.target.outputs.work }} v$V" \
-            --body "Minted \`$DOI\` and built the PDF.
+          git commit -m "Publish $(python3 -c "
+          import json; print(len(json.load(open('/tmp/published.json'))['published']))") research version(s)
 
-          Before merging, check the DOI resolves and the Zenodo record looks right.
+          $SUMMARY"
+          git push origin "$BRANCH"
 
-          Sandbox: ${{ inputs.sandbox }}" \
-          || echo "A pull request already exists for this branch."
+          gh pr create --base main --head "$BRANCH" \
+            --title "Publish research versions" \
+            --body "DOIs minted and PDFs built.
+
+          $SUMMARY
+
+          Check each DOI resolves and the Zenodo records look right before merging."

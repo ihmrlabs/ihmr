@@ -1,0 +1,36 @@
+{
+  "id": "IHMR-RSCH-001",
+  "slug": "state-of-indias-healthcare",
+  "type": "research",
+  "title": "The State of India's Healthcare, September 2026",
+  "summary": "What India's health system currently is, and what it can and cannot tell you about the people it serves. Every figure carries its source and the period the data actually describes, because much of it is older than the date on this article.",
+  "currentVersion": 1,
+  "conceptDoi": null,
+  "versions": [
+    {
+      "version": 1,
+      "published": "2026-09-04",
+      "document": "IHMR-RSCH-001-state-of-indias-healthcare-v1.md",
+      "doi": null,
+      "status": "evidence",
+      "changed": "First publication.",
+      "visualisations": "visualisations",
+      "datasets": [
+        "hypertension-cascade-india-nfhs5",
+        "diabetes-cascade-india-two-sources",
+        "npncd-cumulative-screenings",
+        "abdm-created-vs-used",
+        "oope-share-of-the-trajectory",
+        "life-expectancy-by-state-2018-22"
+      ]
+    }
+  ],
+  "render": {
+    "views": [
+      "article",
+      "visual"
+    ],
+    "dashboard": "visualisations/dashboard.json",
+    "defaultView": "article"
+  }
+}

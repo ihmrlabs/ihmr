@@ -1,4 +1,4 @@
-name: Validate documents
+name: Validate
 
 on:
   pull_request:
@@ -6,14 +6,53 @@ on:
     branches: [main]
 
 jobs:
-  validate:
+  documents:
+    name: Front matter and manifests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      # A malformed document would break website ingestion silently,
-      # so it fails here instead.
-      - name: Validate front matter
+      - run: pip install --quiet jsonschema pyyaml
+
+      # A malformed document would break website ingestion quietly.
+      # It fails here instead.
+      - name: Validate document front matter
         run: python3 schema/validate.py .
+
+      - name: Validate work manifests
+        run: python3 schema/validate_manifests.py .
+
+  links:
+    name: Internal links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check relative links resolve
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, sys
+          bad = []
+          for f in pathlib.Path('.').rglob('*.md'):
+              if '.git/' in str(f): continue
+              for link in re.findall(r'\]\((?!http|mailto|#)([^)]+)\)', f.read_text()):
+                  if not (f.parent / link.split('#')[0]).exists():
+                      bad.append(f'{f} -> {link}')
+          if bad:
+              print('Broken relative links:'); [print(' ', b) for b in bad]; sys.exit(1)
+          print('All relative links resolve.')
+          PY
+
+  prose:
+    name: House style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No em dashes
+        run: |
+          if grep -rl '—' --include='*.md' . ; then
+            echo "Em dashes found. This project uses hyphens."
+            exit 1
+          fi
+          echo "No em dashes."

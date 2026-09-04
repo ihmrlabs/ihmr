@@ -1,0 +1,107 @@
+name: Sync to R2
+
+# Mirrors the corpus into the ihmr R2 bucket on every merge to main.
+#
+# The bucket holds EVERY version, not just the current one, because a
+# published version may have been cited and must stay retrievable at a stable
+# path forever. The site reads the current version; a citation reads whichever
+# version it named.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: sync-r2
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Nothing malformed should reach the bucket.
+      - name: Validate before syncing
+        run: |
+          python3 schema/validate.py .
+          python3 schema/validate_manifests.py .
+
+      - name: Install rclone
+        run: |
+          curl -fsSL https://rclone.org/install.sh | sudo bash
+
+      - name: Configure R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          mkdir -p ~/.config/rclone
+          cat > ~/.config/rclone/rclone.conf <<EOF
+          [r2]
+          type = s3
+          provider = Cloudflare
+          access_key_id = ${R2_ACCESS_KEY_ID}
+          secret_access_key = ${R2_SECRET_ACCESS_KEY}
+          endpoint = https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com
+          acl = private
+          no_check_bucket = true
+          EOF
+
+      # Corpus, mirrored folder for folder. Published versions are immutable,
+      # so we never delete: a path that once resolved must keep resolving.
+      - name: Sync corpus
+        run: |
+          for dir in research essays questions rfcs decisions experiments sources updates architecture; do
+            if [ -d "$dir" ]; then
+              echo "Syncing $dir"
+              rclone copy "$dir" "r2:ihmr/corpus/$dir" \
+                --checksum --transfers 16 --checkers 16 --stats-one-line
+            fi
+          done
+
+      - name: Sync schema and index files
+        run: |
+          rclone copy schema r2:ihmr/corpus/schema --checksum --stats-one-line
+          rclone copyto llms.txt r2:ihmr/corpus/llms.txt
+          rclone copyto README.md r2:ihmr/corpus/README.md
+
+      # An immutable snapshot at this exact commit, so a citation to a revision
+      # keeps resolving even after the document moves on.
+      - name: Snapshot this commit
+        run: |
+          SHA="${{ github.sha }}"
+          for dir in research essays; do
+            [ -d "$dir" ] && rclone copy "$dir" "r2:ihmr/revisions/${SHA}/$dir" \
+              --checksum --transfers 16 --stats-one-line
+          done
+          echo "Snapshotted at ${SHA}"
+
+      - name: Write the sync record
+        run: |
+          cat > /tmp/last-sync.json <<EOF
+          {
+            "commit": "${{ github.sha }}",
+            "ref": "${{ github.ref_name }}",
+            "syncedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "runId": "${{ github.run_id }}"
+          }
+          EOF
+          rclone copyto /tmp/last-sync.json r2:ihmr/last-sync.json
+
+      - name: Trigger site ingestion
+        if: ${{ secrets.INGEST_WEBHOOK_URL != '' }}
+        run: |
+          curl -fsS -X POST "${{ secrets.INGEST_WEBHOOK_URL }}" \
+            -H 'content-type: application/json' \
+            -H "authorization: Bearer ${{ secrets.INGEST_WEBHOOK_TOKEN }}" \
+            -d "{\"commit\":\"${{ github.sha }}\"}" \
+          || echo "Ingestion webhook did not respond. The bucket is current; the site will catch up."

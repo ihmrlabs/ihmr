@@ -6,6 +6,7 @@ status: evidence
 version: 1
 authors:
   - Tejas Parthasarathi Sudarshan
+orcid: https://orcid.org/0009-0008-6765-7281
 created: 2026-09-04
 updated: 2026-09-04
 topics:
@@ -443,7 +444,27 @@ Honesty about gaps is part of the method. The following could not be established
 
 ---
 
-## 12. Sources
+## 12. The data behind this
+
+Every figure in this article comes from a dataset you can download and check. They live in
+[`ihmr-engine/datasets`](https://github.com/ihmrlabs/ihmr-engine/tree/main/datasets), one folder
+each, with a `SOURCE.md` recording the publisher, the URL, the date we retrieved it, and the
+period the data actually covers as distinct from when it was published.
+
+Browse them at [projectihmr.org/datasets](https://projectihmr.org/datasets), or take the whole
+lot from the repository.
+
+Two things to know before you use them. Our work on the datasets is CC BY 4.0, but **the
+underlying data belongs to whoever published it** and keeps their licence, recorded in each
+`SOURCE.md`. And every `Verified by` field is currently blank: retrieval and cross-checking were
+automated, and a person still needs to read each one against the original. We would rather tell
+you that than let you assume otherwise.
+
+If you find an error in any of them, that is one of the most useful things you could tell us.
+
+---
+
+## 13. Sources
 
 **Population and projections**
 

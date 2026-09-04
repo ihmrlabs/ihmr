@@ -156,6 +156,14 @@
       "type": "integer",
       "minimum": 1,
       "description": "Publication version. Increments when a materially revised edition is issued. Earlier versions stay in the repository unchanged, because they have been cited."
+    },
+    "orcid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$",
+      "description": "ORCID of the corresponding author, so citations resolve to a person rather than a name."
     }
   },
   "allOf": [

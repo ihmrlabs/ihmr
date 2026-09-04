@@ -39,6 +39,16 @@
       "type": "string",
       "minLength": 3
     },
+    "tldr": {
+      "description": "The findings, in the author's own words, for someone who will not read the whole thing. Claims only - each one should be defended somewhere below. Not a description of what the document covers.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 10
+      },
+      "minItems": 2,
+      "maxItems": 8
+    },
     "status": {
       "enum": [
         "hypothesis",

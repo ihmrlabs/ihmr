@@ -2,6 +2,13 @@
 id: IHMR-RSCH-001
 type: research
 title: The State of India's Healthcare, September 2026
+tldr:
+  - India can identify a billion people and screen at continental scale, but cannot tell you whether a single abnormal result was ever followed up. No national figure for referral completion exists anywhere in the published record.
+  - 8.5% of adults with hypertension have it controlled. Of the 315 million living with it, about 63% do not know they have it.
+  - The recorded cascade breaks at the same point every time. "Under treatment" means registered on a portal, not taking medicine, and the diagnosed and under-treatment columns are identical in the programme data.
+  - 94 crore health identities exist and 105 crore records are linked to them across all of time - a mean of about 1.1 records per person per lifetime. The identity layer works; the record layer is close to empty.
+  - 43.4% of health spending is still paid out of pocket. Insurance covers hospitalisation; the outpatient care and medicines chronic disease actually needs are not covered.
+  - India has not counted its population since 2011, so every denominator here is a projection. The domestic and UN estimates differ by about 50 million people.
 status: evidence
 version: 1
 authors:

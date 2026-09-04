@@ -4,7 +4,7 @@ We are genuinely glad you are here.
 
 **You do not need to be an engineer to contribute**, and you do not need to know anything about
 Git. If our tooling gets in the way of you telling us something useful, that is our problem to
-fix - please just email hello@projectihmr.com and we will sort it out.
+fix - please just email hello@projectihmr.org and we will sort it out.
 
 The single most valuable thing you can do is **tell us where we are wrong**.
 
@@ -32,7 +32,7 @@ means we have not thought of you yet, and we would like to.
 
 ### 1. Leave a comment on the website
 
-At [projectihmr.com](https://projectihmr.com). No account needed - you verify your email once,
+At [projectihmr.org](https://projectihmr.org). No account needed - you verify your email once,
 and you can comment under your name or anonymously.
 
 **A real person reads every comment before it is published**, and if we do not publish yours,
@@ -100,7 +100,7 @@ Our checks will validate this automatically and tell you plainly if something is
 you would rather not deal with it at all, send us the text and we will handle the rest.
 
 Just below the title, every document carries a short line saying how AI was used in writing it.
-See [AI_USE_POLICY.md](../about/how-we-use-ai.md).
+See [AI_USE_POLICY.md](https://projectihmr.org/about/how-we-use-ai).
 
 ### The standard we hold ourselves to
 
@@ -152,4 +152,4 @@ you like - please do - but be kind to the person.
 ---
 
 Not sure where to start? [`questions/`](../questions/) is a good place. Or just email
-hello@projectihmr.com and tell us what you are thinking. We read everything.
+hello@projectihmr.org and tell us what you are thinking. We read everything.

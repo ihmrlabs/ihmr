@@ -21,7 +21,7 @@ text and we will handle the metadata.
 | `authors` | People. Never AI tools |
 | `topics` / `related` | How the corpus connects to itself |
 | `supersedes` / `superseded_by` | The trail when we change our minds |
-| `ai_disclosure` | How AI was used. Required - see [AI_USE_POLICY.md](../about/how-we-use-ai.md) |
+| `ai_disclosure` | How AI was used. Required - see [AI_USE_POLICY.md](https://projectihmr.org/about/how-we-use-ai) |
 | `signed_off_by` | The person who checked the claims and takes responsibility |
 | `clinical_review_by` | Required for clinical claims |
 | `sources` | Paths into `sources/`, so a claim resolves to the thing it came from |

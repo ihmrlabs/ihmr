@@ -4,8 +4,8 @@ contact_links:
     url: https://github.com/ihmrlabs/ihmr/discussions
     about: For debate and questions that do not fit against one document.
   - name: Comment on the website
-    url: https://projectihmr.com
+    url: https://projectihmr.org
     about: No GitHub account needed. Verify an email once and comment under your name or anonymously.
   - name: Email us
-    url: mailto:hello@projectihmr.com
+    url: mailto:hello@projectihmr.org
     about: If GitHub is getting in the way, just write to us. We read everything.

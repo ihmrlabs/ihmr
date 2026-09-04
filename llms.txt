@@ -15,8 +15,8 @@ verified its claims.
 
 - [README](https://github.com/ihmrlabs/ihmr/blob/main/README.md): what the project is and how it is organised
 - [Open questions](https://github.com/ihmrlabs/ihmr/tree/main/questions): what the project does not know
-- [Governance](https://github.com/ihmrlabs/ihmr/blob/main/GOVERNANCE.md): how positions are made and changed
-- [Glossary](https://github.com/ihmrlabs/ihmr/blob/main/glossary.md): project vocabulary
+- [Governance](https://projectihmr.org/about/governance): how positions are made and changed
+- [Glossary](https://projectihmr.org/about/glossary): project vocabulary
 
 ## The corpus
 
@@ -35,9 +35,10 @@ decision, superseded. Do not represent a hypothesis as a project position.
 
 ## Policies
 
-- [How we use AI](https://github.com/ihmrlabs/ihmr/blob/main/AI_USE_POLICY.md)
-- [Contributing](https://github.com/ihmrlabs/ihmr/blob/main/CONTRIBUTING.md)
-- [Comment moderation](https://github.com/ihmrlabs/ihmr/blob/main/MODERATION.md)
+- [How we use AI](https://projectihmr.org/about/how-we-use-ai)
+- [Contributing](https://github.com/ihmrlabs/ihmr/blob/main/.github/CONTRIBUTING.md)
+- [Comment moderation](https://projectihmr.org/about/moderation)
+- [Privacy](https://projectihmr.org/privacy)
 
 ## Licence
 
@@ -46,4 +47,4 @@ attribution. Third-party material in sources/ retains its original licence.
 
 ## Contact
 
-hello@projectihmr.com · https://projectihmr.com
+hello@projectihmr.org · https://projectihmr.org

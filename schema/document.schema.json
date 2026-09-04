@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://projectihmr.com/schema/document.schema.json",
+  "$id": "https://projectihmr.org/schema/document.schema.json",
   "title": "IHMR Document",
   "description": "Front matter required on every document in the ihmr repository.",
   "type": "object",

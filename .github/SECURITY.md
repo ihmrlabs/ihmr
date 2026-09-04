@@ -4,7 +4,7 @@ Thank you for looking. If you have found something, we would genuinely rather he
 
 ## Reporting
 
-Email **hello@projectihmr.com** with "security" in the subject line. Please do not open a public
+Email **hello@projectihmr.org** with "security" in the subject line. Please do not open a public
 issue for anything that could be exploited before it is fixed.
 
 We will acknowledge within a few days and keep you updated. If you would like credit we will
@@ -12,7 +12,7 @@ give it; if you would rather stay anonymous that is completely fine.
 
 ## What is in scope
 
-- The website at projectihmr.com, its API, and its MCP server
+- The website at projectihmr.org, its API, and its MCP server
 - Anything that could expose a commenter's email address or other personal data
 - The content ingestion pipeline, if it could be made to publish something unreviewed
 

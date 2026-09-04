@@ -58,7 +58,7 @@ Set `ai_disclosure` on anything you draft or substantially edit, and **leave `si
 blank** - only a named human can sign off. If you are between two tiers, declare the higher
 one. Never list an AI as an author. Never write that AI verified anything.
 
-See `about/how-we-use-ai.md`.
+Full policy: https://projectihmr.org/about/how-we-use-ai
 
 ## Where things go
 
@@ -71,11 +71,14 @@ See `about/how-we-use-ai.md`.
 | A position we have adopted | `decisions/` |
 | A test and its result | `experiments/` |
 | How something might be built | `architecture/` |
-| How the project works | `about/` |
 | Converted primary material | `sources/` |
 | What changed this week | `updates/` |
 
 Read the folder's `README.md` before adding to it.
+
+**This repository holds research only.** Governance, the roadmap, the glossary, privacy,
+security, cookies and the moderation policy live in `ihmr-web`, because they describe how the
+site behaves rather than what the research found. Do not add them here.
 
 ## IDs and URLs
 

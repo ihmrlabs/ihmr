@@ -4,7 +4,8 @@
 
 Hello, and thank you for coming to look.
 
-This is an open research project asking a question we think deserves a serious attempt:
+This is the **research repository** for an open project asking a question we think deserves a
+serious attempt:
 
 > **How could India build infrastructure that continuously helps maintain and improve the
 > health of every person, instead of waiting for illness and reacting to it?**
@@ -54,7 +55,7 @@ the top, how much weight we put behind it.
 speculation up as certainty. And when we change our minds, we say that too, keeping the old
 reasoning where you can still find it.
 
-## Finding your way around
+## What is in here
 
 | Folder | What is inside |
 |:--|:--|
@@ -67,10 +68,27 @@ reasoning where you can still find it.
 | [`architecture/`](architecture/) | How the system might be built |
 | [`sources/`](sources/) | Primary material, converted so you can check our work |
 | [`updates/`](updates/) | What changed, and what we learned |
-| [`about/`](about/) | How we work: governance, glossary, roadmap, privacy, security |
 
 Everything is Markdown. Every document has a permanent ID and a visible history, so any claim
 can be traced back to where it came from.
+
+**Research and essays are stored as versioned folders**, each version holding the Markdown and
+a PDF generated from it. Once a version is published it is never edited, because it may already
+have been cited. See [`research/README.md`](research/README.md).
+
+## What is not in here
+
+The website, and the pages describing how the project itself is run:
+
+| | |
+|:--|:--|
+| Governance, roadmap, glossary | [projectihmr.org/about](https://projectihmr.org/about) |
+| How we use AI | [projectihmr.org/about/how-we-use-ai](https://projectihmr.org/about/how-we-use-ai) |
+| Privacy, security, cookies | [projectihmr.org/privacy](https://projectihmr.org/privacy) |
+| How comments are moderated | [projectihmr.org/about/moderation](https://projectihmr.org/about/moderation) |
+
+Those describe how the *site* behaves rather than what the *research* found, so they live with
+the website. **This repository is the research.**
 
 ## Some things we are careful to say
 
@@ -112,7 +130,7 @@ We use AI across this project, in research, engineering and drafting, and we thi
 about that is part of using it responsibly. Every document says how AI was involved. **Every
 document is signed off by a named person who has checked its claims.**
 
-See [how we use AI](about/how-we-use-ai.md).
+Full policy: [projectihmr.org/about/how-we-use-ai](https://projectihmr.org/about/how-we-use-ai)
 
 ## Licence
 
@@ -124,6 +142,8 @@ Please reuse this. Adapt it, fork it, build on it, cite it, take it somewhere we
 Government use, commercial use and academic use are all explicitly welcome. Attribution is all
 we ask.
 
+Published research carries a DOI, so it can be cited formally.
+
 ## Related work
 
 | Repository | What it is for |
@@ -133,6 +153,6 @@ we ask.
 
 ---
 
-[projectihmr.com](https://projectihmr.com) · hello@projectihmr.com
+[projectihmr.org](https://projectihmr.org) · hello@projectihmr.org
 
 Maintained by [Tejas Parthasarathi Sudarshan](https://tejassuds.com)

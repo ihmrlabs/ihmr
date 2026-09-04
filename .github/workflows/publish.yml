@@ -1,0 +1,142 @@
+name: Publish a research version
+
+# Manual only. Publishing mints a DOI, and a published DOI cannot be deleted,
+# so this is never triggered by a push.
+#
+# It lives here rather than in ihmr-engine because it writes to this
+# repository, and a workflow can write to its own repository with the built-in
+# token. Running it from the engine would need a long-lived personal access
+# token, which is a credential to create, store and eventually forget to
+# rotate, for no benefit. The engine is public, so reading its publish scripts
+# needs no token at all.
+
+on:
+  workflow_dispatch:
+    inputs:
+      work:
+        description: 'Work folder, e.g. IHMR-RSCH-001-state-of-indias-healthcare'
+        required: true
+      version:
+        description: 'Version number'
+        required: true
+        default: '1'
+      sandbox:
+        description: 'Use the Zenodo sandbox (fake DOIs, for rehearsal)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the corpus
+        uses: actions/checkout@v4
+
+      - name: Check out the engine's publish scripts
+        uses: actions/checkout@v4
+        with:
+          repository: ihmrlabs/ihmr-engine
+          path: engine
+          # Public repository. No token needed to read it.
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Install pandoc and LaTeX
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
+
+      # Refuses unless signed_off_by is set. A DOI is permanent, and attaching
+      # one to research nobody has verified would make an unchecked claim
+      # permanently citable.
+      - name: Reserve the DOI
+        env:
+          ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
+          ZENODO_SANDBOX: ${{ inputs.sandbox && '1' || '0' }}
+          ZENODO_COMMUNITY: ${{ inputs.sandbox && '' || 'ihmr' }}
+        run: |
+          python3 engine/apps/publish/mint_doi.py reserve \
+            --work "research/${{ inputs.work }}" --version ${{ inputs.version }}
+
+      - name: Write the DOI into front matter
+        run: |
+          WORK="research/${{ inputs.work }}"
+          DOI=$(python3 -c "import json;print(json.load(open('$WORK/v${{ inputs.version }}/.zenodo.json'))['doi'])")
+          python3 - "$WORK" "${{ inputs.version }}" "$DOI" <<'PY'
+          import json, pathlib, re, sys
+          work, version, doi = pathlib.Path(sys.argv[1]), int(sys.argv[2]), sys.argv[3]
+          manifest = json.loads((work / "manifest.json").read_text())
+          entry = next(v for v in manifest["versions"] if v["version"] == version)
+
+          # Into the article, so the PDF built from it carries its own DOI.
+          p = work / f"v{version}" / entry["document"]
+          p.write_text(re.sub(r"^doi:.*$", f"doi: {doi}", p.read_text(), count=1, flags=re.M))
+
+          # And into the manifest, so the site's citation block can show it.
+          entry["doi"] = doi
+          if not manifest.get("conceptDoi"):
+              manifest["conceptDoi"] = doi
+          (work / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+          print(f"Recorded {doi}")
+          PY
+
+      - name: Build the PDF
+        run: |
+          python3 engine/apps/publish/build_pdf.py \
+            --work "research/${{ inputs.work }}" --version ${{ inputs.version }}
+
+      - name: Record the PDF in the manifest
+        run: |
+          python3 - "research/${{ inputs.work }}" "${{ inputs.version }}" <<'PY'
+          import json, pathlib, sys
+          work, version = pathlib.Path(sys.argv[1]), int(sys.argv[2])
+          manifest = json.loads((work / "manifest.json").read_text())
+          entry = next(v for v in manifest["versions"] if v["version"] == version)
+          pdfs = list((work / f"v{version}").glob("*.pdf"))
+          if pdfs:
+              entry["pdf"] = pdfs[0].name
+              (work / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+              print(f"Recorded {pdfs[0].name}")
+          PY
+
+      - name: Publish the deposition
+        env:
+          ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
+          ZENODO_SANDBOX: ${{ inputs.sandbox && '1' || '0' }}
+          ZENODO_COMMUNITY: ${{ inputs.sandbox && '' || 'ihmr' }}
+        run: |
+          python3 engine/apps/publish/mint_doi.py publish \
+            --work "research/${{ inputs.work }}" --version ${{ inputs.version }}
+
+      - name: Validate before proposing the change
+        run: |
+          python3 schema/validate.py .
+          python3 schema/validate_manifests.py .
+
+      # A pull request rather than a direct push, so a person sees the DOI, the
+      # PDF and the manifest change before any of it lands on main.
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="publish/${{ inputs.work }}-v${{ inputs.version }}"
+          rm -f "research/${{ inputs.work }}/v${{ inputs.version }}/.zenodo.json"
+          git config user.name "stages"
+          git config user.email "stages@fanpit.live"
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "Publish ${{ inputs.work }} v${{ inputs.version }}
+
+          Minted the DOI, built the PDF, and recorded both in the manifest."
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "Publish ${{ inputs.work }} v${{ inputs.version }}" \
+            --body "Zenodo DOI minted and the PDF built. Check the DOI resolves and the record looks right before merging.
+
+          Sandbox: ${{ inputs.sandbox }}"

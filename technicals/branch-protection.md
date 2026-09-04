@@ -1,70 +1,77 @@
 # Branch protection
 
-To be applied after the first push. `main` does not exist on the remote until then, and
-protection cannot be set on a branch that is not there.
+Both public repositories use **rulesets** rather than classic branch protection.
 
-## Why this matters more here than in most repositories
+## Why rulesets
 
-Published paths get cited. A DOI landing page, a citation in someone else's paper, and every
-comment on the website all point at a path in `main`. **Force-pushing or rewriting `main` breaks
-things that are not ours to break.**
+Three reasons, and the second one is the one that mattered.
 
-## Rules for `main`
+**They match names, not branches.** Classic protection can only be attached to a branch that
+already exists, which left a real hole: until somebody created `submit-papers`, there was nothing
+to protect, so anyone with write access could create it and push. A ruleset matches the name, so
+the branch is protected before it exists.
 
-```bash
-gh api -X PUT repos/ihmrlabs/ihmr/branches/main/protection \
-  --input .github/branch-protection.json
-```
+**They can be paused and resumed without being destroyed.** Lifting protection for an initial
+import is `enforcement: disabled` and then `active` again. With classic protection you delete the
+configuration and rebuild it from memory, which is exactly when a rule quietly goes missing.
+
+**They are auditable in one place.** `gh api repos/ihmrlabs/<repo>/rulesets` lists everything.
+
+## What is protected
+
+| Repository | Ruleset | State |
+|:--|:--|:--|
+| `ihmr` | `main` | active |
+| `ihmr` | `submit-papers` | active |
+| `ihmr-engine` | `main` | **disabled** until the first push creates the branch |
+
+Private repositories are not protected. Branch protection there needs a paid plan, and it is not
+worth it for the website or the internal notes.
+
+## The rules
 
 | Rule | Why |
 |:--|:--|
-| Require a pull request | Nothing lands unreviewed, including publications |
-| Require status checks: `documents`, `links`, `prose` | A malformed document breaks website ingestion silently |
-| Require branches to be up to date | Two publications merging out of order would produce a manifest that disagrees with itself |
-| **Block force pushes** | Rewriting history breaks every existing citation |
-| **Block deletions** | Self-explanatory |
-| Apply to administrators | The person most likely to push to main at midnight is the maintainer |
+| Pull request required | Nothing lands unreviewed, including publications |
+| Status checks: `Front matter and manifests`, `Internal links`, `House style` | A malformed document breaks website ingestion silently |
+| Strict checks | Two merges out of order would produce a manifest that disagrees with itself |
+| No force pushes | Rewriting history breaks every existing citation |
+| No deletions | Self-explanatory |
+| Linear history | A published path should have one traceable line to it |
+| No bypass actors | The person most likely to push to main at midnight is the maintainer |
 
-## Rules for `submit-papers`
+## Why `submit-papers` is protected at all
 
-**Protected exactly like `main`**, and for a sharper reason: merging into it mints permanent
-DOIs.
+Merging into it mints permanent DOIs. That is a sharper reason than `main` has.
+
+Note though that the protection is not what makes publishing safe. **The idempotency is.** What
+publishes is decided by the state of the papers, not by the push: a paper is eligible only when it
+is signed off and has no DOI yet. Once it has one it is never eligible again, so a stray push
+mints nothing. See [publishing.md](publishing.md).
+
+The ruleset is the second lock, not the first.
+
+## Turning enforcement off and on
+
+For an initial import, when there is nothing published to protect:
 
 ```bash
-gh api -X PUT repos/ihmrlabs/ihmr/branches/submit-papers/protection \
-  --input technicals/branch-protection.json
+# pause
+gh api -X PUT repos/ihmrlabs/ihmr/rulesets/22258221 -f enforcement=disabled
+
+# push
+
+# resume, immediately
+gh api -X PUT repos/ihmrlabs/ihmr/rulesets/22258221 -f enforcement=active
 ```
 
-Same rules, same reasoning. Requiring a pull request means somebody reviews what is about to
-become permanently citable, and blocking force pushes means the branch cannot be rewritten
-underneath a run.
+Do it in one sitting. A ruleset left disabled is worse than one that was never created, because
+it looks protected in a list.
 
-## What actually keeps this safe
+## Activating the engine ruleset
 
-Not the branch protection, useful though it is. **The idempotency.**
+After `ihmr-engine` has its first push and a `main` branch exists:
 
-What publishes is decided by the state of the papers, not by the push that triggered the run. A
-paper is eligible when it is signed off, has no DOI, and carries a publishable status. Once it
-has a DOI it is never eligible again.
-
-So re-running a failed job publishes nothing. Merging a stale branch publishes nothing. Pushing
-twice publishes nothing. The only way to mint is to make a paper eligible, which means signing
-it off, which is a deliberate act by a named person.
-
-## The flow
-
-```text
-finish a paper, set signed_off_by
-        ↓
-open a pull request into submit-papers
-        → dry run: lists exactly what merging would publish. Mints nothing.
-        ↓
-merge it
-        → mints a DOI for every eligible paper
-        → builds each PDF, with its DOI inside it
-        → deposits to Zenodo, into the ihmr community
-        → opens a pull request into main
-        ↓
-merge that
-        → syncs to R2, re-ingests, goes live
+```bash
+gh api -X PUT repos/ihmrlabs/ihmr-engine/rulesets/22258070 -f enforcement=active
 ```

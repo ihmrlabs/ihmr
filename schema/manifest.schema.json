@@ -4,7 +4,14 @@
   "title": "IHMR Work Manifest",
   "description": "Sits at the root of a research or essay folder and tells the website what exists, which version is current, and how each version should be presented. The website reads this rather than guessing from the directory listing.",
   "type": "object",
-  "required": ["id", "slug", "type", "title", "currentVersion", "versions"],
+  "required": [
+    "id",
+    "slug",
+    "type",
+    "title",
+    "currentVersion",
+    "versions"
+  ],
   "additionalProperties": false,
   "properties": {
     "id": {
@@ -17,11 +24,22 @@
       "pattern": "^[a-z0-9-]+$",
       "description": "The public URL segment. Permanent once published."
     },
-    "type": { "enum": ["research", "essay"] },
-    "title": { "type": "string" },
+    "type": {
+      "enum": [
+        "research",
+        "essay"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
     "summary": {
       "type": "string",
       "description": "One or two sentences, used in listings and link previews."
+    },
+    "pinned": {
+      "description": "Show this first on the index. For the pieces we most want a newcomer to read, not the most recent.",
+      "type": "boolean"
     },
     "currentVersion": {
       "type": "integer",
@@ -29,7 +47,10 @@
       "description": "Which version the site shows by default. Earlier versions stay reachable at their own URLs."
     },
     "conceptDoi": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Zenodo concept DOI. Always resolves to the newest version."
     },
     "versions": {
@@ -37,11 +58,20 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["version", "document"],
+        "required": [
+          "version",
+          "document"
+        ],
         "additionalProperties": false,
         "properties": {
-          "version": { "type": "integer", "minimum": 1 },
-          "published": { "type": "string", "format": "date" },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "published": {
+            "type": "string",
+            "format": "date"
+          },
           "document": {
             "type": "string",
             "description": "Markdown filename, relative to the version folder."
@@ -50,13 +80,26 @@
             "type": "string",
             "description": "Generated PDF, relative to the version folder."
           },
-          "doi": { "type": ["string", "null"] },
+          "doi": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "changed": {
             "type": "string",
             "description": "What changed from the previous version, in one line. Shown in the version list."
           },
           "status": {
-            "enum": ["hypothesis", "evidence", "proposal", "specification", "experiment", "decision", "superseded"]
+            "enum": [
+              "hypothesis",
+              "evidence",
+              "proposal",
+              "specification",
+              "experiment",
+              "decision",
+              "superseded"
+            ]
           },
           "visualisations": {
             "type": "string",
@@ -64,7 +107,9 @@
           },
           "datasets": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Dataset identifiers this version depends on, resolved from ihmr-engine."
           }
         }
@@ -77,14 +122,24 @@
       "properties": {
         "views": {
           "type": "array",
-          "items": { "enum": ["article", "visual"] },
+          "items": {
+            "enum": [
+              "article",
+              "visual"
+            ]
+          },
           "description": "Which views to offer. 'visual' adds an interactive explorer alongside the reading view."
         },
         "dashboard": {
           "type": "string",
           "description": "Dashboard definition, relative to the version folder. Renders above the article."
         },
-        "defaultView": { "enum": ["article", "visual"] }
+        "defaultView": {
+          "enum": [
+            "article",
+            "visual"
+          ]
+        }
       }
     }
   }

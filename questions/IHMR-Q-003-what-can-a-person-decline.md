@@ -15,7 +15,6 @@ lang: en
 
 # What can a person decline, and what happens then?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 A system built to make sure nobody is forgotten could very easily become a system that will not
 leave anyone alone. We take this seriously.

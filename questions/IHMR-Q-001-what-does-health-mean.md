@@ -15,7 +15,6 @@ lang: en
 
 # What does health actually mean, in operational terms?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 If a system is going to maintain something, it has to know what it is maintaining. This is the
 first question, and everything else inherits its answer.

@@ -15,7 +15,6 @@ lang: en
 
 # Who pays to keep someone healthy?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 Insurance mostly monetises catastrophe. It pays when something has already gone wrong. The
 question we cannot yet answer is who funds the first unit of improved health, before anything

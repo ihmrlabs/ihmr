@@ -15,7 +15,6 @@ lang: en
 
 # Who would operate something like this?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 We have deliberately not answered this, and we would like to explain why before asking for
 help with it.

@@ -15,7 +15,6 @@ lang: en
 
 # Where does AI belong, and where should it not?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 We think AI changes what coordination costs, and that this is the main reason something like
 IHMR might now be possible. We also think an AI quietly acquiring clinical authority would be a

@@ -15,7 +15,6 @@ lang: en
 
 # What does sovereignty actually require here?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 If something like this ever became real infrastructure, it would be the kind of system a
 country cannot afford to have switched off by someone else.

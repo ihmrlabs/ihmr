@@ -15,7 +15,6 @@ lang: en
 
 # Who is allowed to decide that something needs attention?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 If the system can say "this person needs a blood pressure check," something or someone made
 that call. Who, and on what authority?

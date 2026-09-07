@@ -15,7 +15,6 @@ lang: en
 
 # How do we know something actually happened?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 We think this may be the hardest problem in the whole design, and we would rather say that
 loudly than discover it later.

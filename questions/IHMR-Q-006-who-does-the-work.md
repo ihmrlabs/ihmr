@@ -15,7 +15,6 @@ lang: en
 
 # Who actually does the work?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 Knowing what should happen is not the same as making it happen. Identifying a need and then
 having nobody to act on it produces a very well organised list that helps nobody.

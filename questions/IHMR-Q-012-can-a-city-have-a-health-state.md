@@ -15,7 +15,6 @@ lang: en
 
 # Can a city have a health state of its own?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 People do not live in the abstract. They live in neighbourhoods, breathe particular air, walk
 or fail to walk particular streets, and buy food from whatever is nearby.

@@ -15,7 +15,6 @@ lang: en
 
 # What is the least we need to know about a person?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 The instinct with any system like this is to collect everything. We think that instinct is
 wrong, and we would like to know how much less would actually do.

@@ -15,7 +15,6 @@ lang: en
 
 # Can the system coordinate care without exposing the diagnosis?
 
-> **AI disclosure:** AI-assisted research · Awaiting sign-off
 
 To arrange a test, someone has to know a test is needed. Do they also have to know why?
 

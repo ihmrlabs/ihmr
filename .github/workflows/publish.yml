@@ -172,6 +172,12 @@ jobs:
               'published': published, 'failed': failed,
           }))
           print(f"\nPublished {len(published)}, failed {len(failed)}")
+
+          # One paper failing must not strand the others, but every paper
+          # failing is a broken pipeline reporting success. The previous run
+          # went green having published nothing.
+          if failed and not published:
+              sys.exit(1)
           PYTHON
 
       - name: Validate again, now that files have changed

@@ -14,3 +14,10 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Build scratch. Charts are rendered into the version folder while the PDF is
+# assembled and removed afterwards; a failed build leaves them behind.
+**/_charts/
+**/_build.md
+**/_test.md
+**/.zenodo.json

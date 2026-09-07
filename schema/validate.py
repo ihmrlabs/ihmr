@@ -40,7 +40,11 @@ SKIP_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md"}
 # which is the same kind of thing as README or CONTRIBUTING, not a research
 # claim. Front matter carries a status and a publication state, and neither
 # means anything for a document that is simply true of how the repo runs.
-SKIP_DIRS = (".github/", "technicals/")
+# engine/ is where the publish workflow checks out ihmr-engine, inside this
+# working tree because Actions paths are relative to the workspace. It is a
+# sibling repository, not part of the corpus, and its dataset files carry
+# provenance headers rather than document front matter.
+SKIP_DIRS = (".github/", "technicals/", "engine/")
 
 problems, checked = [], 0
 

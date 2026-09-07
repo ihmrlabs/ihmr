@@ -97,11 +97,20 @@ jobs:
           EOF
           rclone copyto /tmp/last-sync.json r2:ihmr/last-sync.json
 
+      # The secrets context is not available in a step-level `if`, and using it
+      # there makes GitHub reject the whole workflow at parse time rather than
+      # skip the step - no jobs run at all. Test the value inside the step.
       - name: Trigger site ingestion
-        if: ${{ secrets.INGEST_WEBHOOK_URL != '' }}
+        env:
+          INGEST_WEBHOOK_URL: ${{ secrets.INGEST_WEBHOOK_URL }}
+          INGEST_WEBHOOK_TOKEN: ${{ secrets.INGEST_WEBHOOK_TOKEN }}
         run: |
-          curl -fsS -X POST "${{ secrets.INGEST_WEBHOOK_URL }}" \
+          if [ -z "$INGEST_WEBHOOK_URL" ]; then
+            echo "No ingestion webhook configured. The bucket is current; the site reads it directly."
+            exit 0
+          fi
+          curl -fsS -X POST "$INGEST_WEBHOOK_URL" \
             -H 'content-type: application/json' \
-            -H "authorization: Bearer ${{ secrets.INGEST_WEBHOOK_TOKEN }}" \
+            -H "authorization: Bearer $INGEST_WEBHOOK_TOKEN" \
             -d "{\"commit\":\"${{ github.sha }}\"}" \
           || echo "Ingestion webhook did not respond. The bucket is current; the site will catch up."

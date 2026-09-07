@@ -32,7 +32,7 @@ ai_tools:
   - claude-fable-5
 signed_off_by: Tejas Parthasarathi Sudarshan
 signed_off_date: 2026-09-08
-doi: 10.5281/zenodo.22649248
+doi: 10.5281/zenodo.22649388
 license: CC-BY-4.0
 lang: en
 ---

@@ -112,18 +112,21 @@ jobs:
           ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
           ZENODO_SANDBOX: ${{ github.event_name == 'workflow_dispatch' && inputs.sandbox && '1' || '0' }}
           ZENODO_COMMUNITY: ${{ github.event_name == 'workflow_dispatch' && inputs.sandbox && '' || 'ihmr' }}
+          # Through the environment, never interpolated into the shell. A title
+          # containing an apostrophe - "The State of India's Healthcare" - ends
+          # the quoting and the rest of the JSON is run as commands.
+          PAPERS: ${{ steps.scan.outputs.papers }}
         run: |
-          PAPERS='${{ steps.scan.outputs.papers }}'
-          echo "$PAPERS" | python3 -c "
-          import json, subprocess, sys, pathlib, re
+          python3 <<'PYTHON'
+          import json, os, subprocess, sys, pathlib, re
 
-          papers = json.load(sys.stdin)['papers']
+          papers = json.loads(os.environ['PAPERS'])['papers']
           published, failed = [], []
 
           for p in papers:
               work = pathlib.Path(p['folder']) / p['work']
               version = p['version']
-              print(f'--- {p[\"work\"]} v{version} ---', flush=True)
+              print(f"--- {p['work']} v{version} ---", flush=True)
 
               try:
                   subprocess.run(['python3', 'engine/apps/publish/mint_doi.py', 'reserve',
@@ -167,8 +170,8 @@ jobs:
           pathlib.Path('/tmp/published.json').write_text(json.dumps({
               'published': published, 'failed': failed,
           }))
-          print(f'\nPublished {len(published)}, failed {len(failed)}')
-          "
+          print(f"\nPublished {len(published)}, failed {len(failed)}")
+          PYTHON
 
       - name: Validate again, now that files have changed
         if: github.event_name != 'pull_request' && steps.scan.outputs.count != '0'

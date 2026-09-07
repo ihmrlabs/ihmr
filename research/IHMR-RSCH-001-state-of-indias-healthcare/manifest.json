@@ -6,13 +6,13 @@
   "summary": "What India's health system currently is, and what it can and cannot tell you about the people it serves. Every figure carries its source and the period the data actually describes, because much of it is older than the date on this article.",
   "pinned": true,
   "currentVersion": 1,
-  "conceptDoi": null,
+  "conceptDoi": "10.5281/zenodo.22649209",
   "versions": [
     {
       "version": 1,
       "published": "2026-09-04",
       "document": "IHMR-RSCH-001-state-of-indias-healthcare-v1.md",
-      "doi": null,
+      "doi": "10.5281/zenodo.22649209",
       "status": "evidence",
       "changed": "First publication.",
       "visualisations": "visualisations",
@@ -23,7 +23,8 @@
         "abdm-created-vs-used",
         "oope-share-of-the-trajectory",
         "life-expectancy-by-state-2018-22"
-      ]
+      ],
+      "pdf": "IHMR-RSCH-001-state-of-indias-healthcare-v1.pdf"
     }
   ],
   "render": {

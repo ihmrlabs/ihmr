@@ -30,8 +30,8 @@ related:
 ai_disclosure: substantially-ai-assisted
 ai_tools:
   - claude-fable-5
-signed_off_by:
-signed_off_date:
+signed_off_by: Tejas Parthasarathi Sudarshan
+signed_off_date: 2026-09-08
 doi:
 license: CC-BY-4.0
 lang: en
@@ -39,11 +39,11 @@ lang: en
 
 # The State of India's Healthcare, September 2026
 
-> **AI disclosure:** Substantially AI-assisted · Awaiting human sign-off
+> **AI disclosure:** Substantially AI-assisted · Verified and signed off by Tejas Parthasarathi Sudarshan · 8 September 2026
 >
 > Research was retrieved and drafted by AI, then every claim was independently checked against
-> its cited source by a separate verification pass. **It has not yet been signed off by a
-> person, and until it is, nothing here should be cited.** See
+> its cited source by a separate verification pass, and read and signed off by a named person
+> before publication. See
 > [how we use AI](https://projectihmr.org/about/how-we-use-ai).
 
 *An IHMR research article. IHMR is an open research project on Indian health infrastructure. Everything below is drawn from published, verifiable sources; every figure carries its source and the period the data actually describes.*

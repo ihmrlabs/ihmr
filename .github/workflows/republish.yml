@@ -1,0 +1,137 @@
+name: Republish artefact
+
+# Rebuild the PDF for a version that is already published, and put the
+# corrected file on Zenodo as a new version.
+#
+# Zenodo locks the files of a published record. A broken artefact therefore
+# cannot be edited, only superseded - so this mints a new version DOI. The
+# concept DOI does not change and keeps resolving to the newest version, which
+# means an existing citation still lands on the right work and now lands on the
+# corrected copy of it.
+#
+# This is for fixing the rendering, never the research. If a claim changes,
+# that is a new version of the paper with its own folder, not this.
+
+on:
+  workflow_dispatch:
+    inputs:
+      work:
+        description: 'Work folder, e.g. research/IHMR-RSCH-001-state-of-indias-healthcare'
+        required: true
+      version:
+        description: 'Version number'
+        required: true
+        default: '1'
+      reason:
+        description: 'What was wrong with the published artefact'
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  republish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ihmrlabs/ihmr-engine
+          path: engine
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Install pandoc, LaTeX and the plotting library
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra \
+            lmodern
+          pip install --quiet matplotlib
+
+      - name: Reserve a new version
+        env:
+          ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
+          ZENODO_COMMUNITY: ihmr
+        run: |
+          python3 engine/apps/publish/mint_doi.py newversion \
+            --work "${{ inputs.work }}" --version "${{ inputs.version }}"
+
+      - name: Write the new DOI in and rebuild the PDF
+        env:
+          WORK: ${{ inputs.work }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          python3 <<'PYTHON'
+          import json, os, pathlib, re, subprocess
+
+          work = pathlib.Path(os.environ['WORK'])
+          version = int(os.environ['VERSION'])
+          vdir = work / f'v{version}'
+          doi = json.loads((vdir / '.zenodo.json').read_text())['doi']
+
+          manifest = json.loads((work / 'manifest.json').read_text())
+          entry = next(v for v in manifest['versions'] if v['version'] == version)
+
+          doc = vdir / entry['document']
+          doc.write_text(re.sub(r'^doi:.*$', f'doi: {doi}', doc.read_text(),
+                                count=1, flags=re.M))
+
+          entry['doi'] = doi
+          (work / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+
+          subprocess.run(['python3', 'engine/apps/publish/build_pdf.py',
+                          '--work', str(work), '--version', str(version)], check=True)
+          PYTHON
+
+      - name: Publish the new version
+        env:
+          ZENODO_API_TOKEN: ${{ secrets.ZENODO_API_TOKEN }}
+          ZENODO_COMMUNITY: ihmr
+        run: |
+          python3 engine/apps/publish/mint_doi.py publish \
+            --work "${{ inputs.work }}" --version "${{ inputs.version }}"
+
+      - name: Validate, then record it here
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORK: ${{ inputs.work }}
+          VERSION: ${{ inputs.version }}
+          REASON: ${{ inputs.reason }}
+        run: |
+          python3 schema/validate.py .
+          python3 schema/validate_manifests.py .
+
+          DOI=$(python3 -c "
+          import json, pathlib, os
+          print(json.loads(pathlib.Path(os.environ['WORK'] + '/v' + os.environ['VERSION'] + '/.zenodo.json').read_text())['doi'])")
+          rm -f "$WORK/v$VERSION/.zenodo.json"
+
+          BRANCH="republished/${{ github.run_id }}"
+          git config user.name "tejassudsfp"
+          git config user.email "206055538+tejassudsfp@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -A -- ':!engine' ':!*/.zenodo.json'
+          git commit -m "Republish $WORK v$VERSION as $DOI
+
+          $REASON
+
+          Zenodo locks the files of a published record, so the corrected
+          artefact is a new version rather than an edit. The concept DOI is
+          unchanged and resolves to this one."
+          git push origin "$BRANCH"
+
+          {
+            echo "## Republished"
+            echo
+            echo "- **New version DOI:** $DOI"
+            echo "- **Reason:** $REASON"
+            echo
+            echo "Merge to record it: https://github.com/${GITHUB_REPOSITORY}/compare/main...${BRANCH}?expand=1"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -476,9 +476,10 @@ lot from the repository.
 
 Two things to know before you use them. Our work on the datasets is CC BY 4.0, but **the
 underlying data belongs to whoever published it** and keeps their licence, recorded in each
-`SOURCE.md`. And every `Verified by` field is currently blank: retrieval and cross-checking were
-automated, and a person still needs to read each one against the original. We would rather tell
-you that than let you assume otherwise.
+`SOURCE.md`. And retrieval and cross-checking were automated before each one was checked against
+its cited source and signed off by IHMR Labs, which is what the `Verified by` field records. That
+is a different and weaker thing than an independent audit, and we would rather say so than let you
+assume otherwise.
 
 If you find an error in any of them, that is one of the most useful things you could tell us.
 

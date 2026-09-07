@@ -52,6 +52,11 @@ for f in sorted(root.rglob("*.md")):
     rel = f.relative_to(root).as_posix()
     if ".git/" in rel or rel.startswith(SKIP_DIRS) or f.name in SKIP_NAMES:
         continue
+    # Build scratch. The PDF build writes _build.md and _charts/ into a version
+    # folder and clears them afterwards; a failed or interrupted build leaves
+    # them, and a leftover should not fail validation.
+    if any(part.startswith("_") for part in rel.split("/")):
+        continue
     fm = parse_fm(f.read_text())
     if fm is None:
         problems.append((rel, "no front matter")); continue

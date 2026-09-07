@@ -102,7 +102,8 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
-            pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
+            pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra \
+            lmodern
 
       # ---------- Everything below only runs for a real publication ----------
 
@@ -190,7 +191,7 @@ jobs:
           git config user.name "stages"
           git config user.email "stages@fanpit.live"
           git checkout -b "$BRANCH"
-          git add -A
+          git add -A -- ':!engine' ':!*/.zenodo.json'
 
           SUMMARY=$(python3 -c "
           import json
@@ -210,10 +211,29 @@ jobs:
           $SUMMARY"
           git push origin "$BRANCH"
 
-          gh pr create --base main --head "$BRANCH" \
-            --title "Publish research versions" \
-            --body "DOIs minted and PDFs built.
+          # The branch is pushed and that is the part that matters - the DOIs and
+          # PDFs are safe in it either way. Opening the pull request needs the
+          # organisation to allow Actions to create pull requests, which is a
+          # setting rather than a token, so failing the whole run over it would
+          # hide a successful publication behind a red cross.
+          if gh pr create --base main --head "$BRANCH" \
+               --title "Publish research versions" \
+               --body "DOIs minted and PDFs built.
 
           $SUMMARY
 
-          Check each DOI resolves and the Zenodo records look right before merging."
+          Check each DOI resolves and the Zenodo records look right before merging."; then
+            echo "Pull request opened." >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "## Published, but the pull request needs opening by hand"
+              echo
+              echo "$SUMMARY"
+              echo
+              echo "Actions is not permitted to create pull requests in this organisation."
+              echo "Settings > Actions > General > Workflow permissions > allow Actions to create"
+              echo "and approve pull requests. Until then, open it here:"
+              echo
+              echo "https://github.com/${GITHUB_REPOSITORY}/compare/main...${BRANCH}?expand=1"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

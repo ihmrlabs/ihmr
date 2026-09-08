@@ -33,7 +33,7 @@ def parse_fm(text):
                 out[key] = val
     return out
 
-SKIP_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md"}
+SKIP_NAMES = {"README.md", "AGENTS.md", "CLAUDE.md", "LICENSING.md"}
 
 # Not corpus documents. technicals/ explains how this repository is operated -
 # how publishing works, what the branch rules are, where things land in R2 -

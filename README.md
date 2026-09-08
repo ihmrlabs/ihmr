@@ -137,6 +137,7 @@ Full policy: [projectihmr.org/about/how-we-use-ai](https://projectihmr.org/about
 - Research and documentation: **CC BY 4.0**, see [LICENSE](LICENSE)
 - Software: **Apache 2.0**, see [LICENSE-CODE](LICENSE-CODE)
 - Third-party material in `sources/` keeps its original licence, recorded per file
+- What each one covers, in detail: [LICENSING.md](LICENSING.md)
 
 Please reuse this. Adapt it, fork it, build on it, cite it, take it somewhere we never would.
 Government use, commercial use and academic use are all explicitly welcome. Attribution is all
